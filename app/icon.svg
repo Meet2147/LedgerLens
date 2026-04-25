@@ -7,8 +7,9 @@
   <path d="M48.8 46.8L53 51" stroke="#FFFAF2" stroke-width="3" stroke-linecap="round"/>
   <defs>
     <linearGradient id="paint0_linear_1_2" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0D6B57"/>
-      <stop offset="1" stop-color="#D98B41"/>
+      <stop stop-color="#18D4F4"/>
+      <stop offset="0.55" stop-color="#3B97E3"/>
+      <stop offset="1" stop-color="#C786FF"/>
     </linearGradient>
   </defs>
 </svg>

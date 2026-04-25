@@ -9,8 +9,9 @@ export function BrandMark({ className = "brand-mark", title = "LedgerLens" }) {
     >
       <defs>
         <linearGradient id="ledgerlens-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
-          <stop offset="0%" stopColor="#0d6b57" />
-          <stop offset="100%" stopColor="#d98b41" />
+          <stop offset="0%" stopColor="#18d4f4" />
+          <stop offset="55%" stopColor="#3b97e3" />
+          <stop offset="100%" stopColor="#c786ff" />
         </linearGradient>
       </defs>
       <rect fill="url(#ledgerlens-gradient)" height="56" rx="18" width="56" x="4" y="4" />
@@ -23,7 +24,7 @@ export function BrandMark({ className = "brand-mark", title = "LedgerLens" }) {
         fill="#fffaf2"
         opacity="0.86"
       />
-      <circle cx="44" cy="42" fill="#1f2421" opacity="0.12" r="9" />
+      <circle cx="44" cy="42" fill="#263447" opacity="0.12" r="9" />
       <circle cx="44" cy="42" fill="none" r="6.5" stroke="#fffaf2" strokeWidth="3" />
       <path
         d="M48.8 46.8 53 51"
