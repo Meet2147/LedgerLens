@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "email": "meetjethwa3@gmail.com",
+      "name": "Meet Jethwa",
+      "tier": "professional",
+      "updatedAt": "2026-04-25T14:03:19.068Z",
+      "createdAt": "2026-04-25T13:20:34.077Z",
+      "billingCycle": "annual",
+      "paymentStatus": "pending",
+      "razorpayOrderId": "",
+      "razorpayPaymentId": ""
+    }
+  ]
+}
