@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { addWorkspaceMember, getCurrentUser } from "@/lib/auth";
 import { getTierLimits } from "@/lib/pricing";
+import { buildAbsoluteUrl } from "@/lib/request-url";
 
 export async function POST(request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.redirect(new URL("/login?error=Please+log+in+first", request.url));
+    return NextResponse.redirect(buildAbsoluteUrl(request, "/login?error=Please+log+in+first"));
   }
 
   const formData = await request.formData();
@@ -15,10 +16,10 @@ export async function POST(request) {
 
   try {
     await addWorkspaceMember(currentUser.email, memberEmail, limits.maxWorkspaceUsers);
-    return NextResponse.redirect(new URL("/account?workspace=updated", request.url));
+    return NextResponse.redirect(buildAbsoluteUrl(request, "/account?workspace=updated"));
   } catch (error) {
     return NextResponse.redirect(
-      new URL(`/account?error=${encodeURIComponent(error.message)}`, request.url)
+      buildAbsoluteUrl(request, `/account?error=${encodeURIComponent(error.message)}`)
     );
   }
 }
