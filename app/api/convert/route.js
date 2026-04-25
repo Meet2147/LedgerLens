@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth";
+import { getTierLimits } from "@/lib/pricing";
 import { convertStatement } from "@/lib/statement-parser";
+import { addMonthlyUsage, getMonthlyUsage } from "@/lib/usage";
 
 export const runtime = "nodejs";
 
@@ -10,22 +13,68 @@ function normalizeFileStem(filename = "statement.pdf") {
 
 export async function POST(request) {
   try {
+    const currentUser = await getCurrentUser();
+    const tier = currentUser?.tier || "personal";
+    const limits = getTierLimits(tier);
     const formData = await request.formData();
-    const statement = formData.get("statement");
+    const statements = formData
+      .getAll("statement")
+      .filter((file) => file && typeof file.arrayBuffer === "function");
     const password = String(formData.get("password") || "");
 
-    if (!statement || typeof statement.arrayBuffer !== "function") {
-      return NextResponse.json({ error: "Upload a PDF bank statement first." }, { status: 400 });
+    if (statements.length === 0) {
+      return NextResponse.json({ error: "Upload at least one PDF bank statement first." }, { status: 400 });
     }
 
-    if (statement.type && statement.type !== "application/pdf") {
-      return NextResponse.json({ error: "Only PDF bank statements are supported right now." }, { status: 400 });
+    if (statements.length > limits.maxFilesPerUpload) {
+      return NextResponse.json(
+        {
+          error: `Your ${tier} plan supports up to ${limits.maxFilesPerUpload} file${limits.maxFilesPerUpload === 1 ? "" : "s"} per upload.`
+        },
+        { status: 403 }
+      );
     }
 
-    const buffer = Buffer.from(await statement.arrayBuffer());
-    const result = await convertStatement(buffer, password);
+    for (const statement of statements) {
+      if (statement.type && statement.type !== "application/pdf") {
+        return NextResponse.json(
+          { error: "Only PDF bank statements are supported right now." },
+          { status: 400 }
+        );
+      }
+    }
 
-    if (result.rows.length === 0) {
+    let rows = [];
+    let totalPages = 0;
+    const fileNames = [];
+
+    for (const statement of statements) {
+      const buffer = Buffer.from(await statement.arrayBuffer());
+      const result = await convertStatement(buffer, password);
+      totalPages += result.pageCount;
+      fileNames.push(statement.name);
+      rows = rows.concat(
+        result.rows.map((row) => ({
+          ...row,
+          sourceFile: statement.name
+        }))
+      );
+    }
+
+    if (currentUser) {
+      const pagesUsed = await getMonthlyUsage(currentUser.email);
+
+      if (pagesUsed + totalPages > limits.pagesPerMonth) {
+        return NextResponse.json(
+          {
+            error: `This conversion would exceed your monthly limit of ${limits.pagesPerMonth} pages. You have already used ${pagesUsed} pages this month.`
+          },
+          { status: 403 }
+        );
+      }
+    }
+
+    if (rows.length === 0) {
       return NextResponse.json(
         {
           error:
@@ -35,10 +84,16 @@ export async function POST(request) {
       );
     }
 
+    const updatedUsage = currentUser ? await addMonthlyUsage(currentUser.email, totalPages) : null;
+
     return NextResponse.json({
-      fileStem: normalizeFileStem(statement.name),
-      pageCount: result.pageCount,
-      rows: result.rows
+      fileStem: normalizeFileStem(fileNames.length === 1 ? fileNames[0] : "ledgerlens-batch"),
+      pageCount: totalPages,
+      rows,
+      queuePriority: limits.processingPriority,
+      pagesUsedThisMonth: updatedUsage,
+      pagesRemainingThisMonth: currentUser ? Math.max(0, limits.pagesPerMonth - updatedUsage) : null,
+      exportFormats: limits.exports
     });
   } catch (error) {
     const message =

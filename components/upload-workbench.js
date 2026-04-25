@@ -3,9 +3,13 @@
 import { useMemo, useState, useTransition } from "react";
 import ExcelJS from "exceljs";
 
-const columns = ["date", "description", "debit", "credit", "balance"];
+function getColumns(includeSourceFile) {
+  return includeSourceFile
+    ? ["sourceFile", "date", "description", "debit", "credit", "balance"]
+    : ["date", "description", "debit", "credit", "balance"];
+}
 
-function downloadCsv(rows, fileName) {
+function downloadCsv(rows, fileName, columns) {
   const csvRows = [
     columns.join(","),
     ...rows.map((row) =>
@@ -24,7 +28,7 @@ function downloadCsv(rows, fileName) {
   URL.revokeObjectURL(url);
 }
 
-async function downloadXlsx(rows, fileName) {
+async function downloadXlsx(rows, fileName, columns) {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Transactions");
 
@@ -52,29 +56,53 @@ async function downloadXlsx(rows, fileName) {
   URL.revokeObjectURL(url);
 }
 
-export function UploadWorkbench() {
-  const [file, setFile] = useState(null);
+function downloadJson(rows, fileName) {
+  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${fileName}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+export function UploadWorkbench({ capabilities, currentUser }) {
+  const [files, setFiles] = useState([]);
   const [password, setPassword] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const columns = useMemo(
+    () => getColumns((result?.rows || []).some((row) => row.sourceFile)),
+    [result]
+  );
 
   const previewRows = useMemo(() => result?.rows?.slice(0, 8) ?? [], [result]);
+  const isProfessional = capabilities.maxFilesPerUpload > 1;
 
   function handleSubmit(event) {
     event.preventDefault();
     setError("");
     setResult(null);
 
-    if (!file) {
-      setError("Choose a bank statement PDF first.");
+    if (files.length === 0) {
+      setError("Choose at least one bank statement PDF first.");
+      return;
+    }
+
+    if (files.length > capabilities.maxFilesPerUpload) {
+      setError(
+        `Your ${capabilities.tierName} plan supports up to ${capabilities.maxFilesPerUpload} file${capabilities.maxFilesPerUpload === 1 ? "" : "s"} per upload.`
+      );
       return;
     }
 
     startTransition(async () => {
       try {
         const payload = new FormData();
-        payload.append("statement", file);
+        files.forEach((file) => {
+          payload.append("statement", file);
+        });
         payload.append("password", password);
 
         const response = await fetch("/api/convert", {
@@ -101,18 +129,25 @@ export function UploadWorkbench() {
         <div className="eyebrow">Upload</div>
         <h2>Upload a statement, add a password if needed, and export clean rows.</h2>
         <p className="section-copy">
-          This MVP supports PDF statements and lets the user provide a password for protected files.
-          The parser extracts transaction-like rows into a spreadsheet-ready table.
+          This workspace enforces your plan limits, supports password-protected PDFs, and extracts
+          transaction-like rows into spreadsheet-ready data.
         </p>
         <p className="privacy-note">
           We do not store your uploaded PDF or the extracted transaction data.
         </p>
+        <div className="capability-summary">
+          <span>{capabilities.pagesPerMonth} pages / month</span>
+          <span>{capabilities.maxFilesPerUpload} file{capabilities.maxFilesPerUpload === 1 ? "" : "s"} per upload</span>
+          <span>{capabilities.supportLevel}</span>
+          <span>{capabilities.processingPriority} processing</span>
+        </div>
         <form className="upload-form" onSubmit={handleSubmit}>
           <label className="input-group">
-            <span>Bank statement PDF</span>
+            <span>Bank statement PDF{capabilities.maxFilesPerUpload > 1 ? "s" : ""}</span>
             <input
               accept="application/pdf"
-              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+              multiple={capabilities.maxFilesPerUpload > 1}
+              onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
               type="file"
             />
           </label>
@@ -146,26 +181,47 @@ export function UploadWorkbench() {
                 <span>pages processed</span>
               </div>
             </div>
+            {currentUser ? (
+              <p className="muted usage-line">
+                {result.pagesUsedThisMonth} pages used this month · {result.pagesRemainingThisMonth} pages
+                remaining · {result.queuePriority} processing
+              </p>
+            ) : (
+              <p className="muted usage-line">
+                Guest conversions use Personal plan defaults. Sign up to track usage and unlock Pro
+                features.
+              </p>
+            )}
             <div className="download-actions">
               <button
                 className="secondary-button"
-                onClick={() => downloadCsv(result.rows, result.fileStem)}
+                onClick={() => downloadCsv(result.rows, result.fileStem, columns)}
                 type="button"
               >
                 Download CSV
               </button>
               <button
                 className="secondary-button"
-                onClick={() => downloadXlsx(result.rows, result.fileStem)}
+                onClick={() => downloadXlsx(result.rows, result.fileStem, columns)}
                 type="button"
               >
                 Download XLSX
               </button>
+              {capabilities.exportFormats.includes("json") ? (
+                <button
+                  className="secondary-button"
+                  onClick={() => downloadJson(result.rows, result.fileStem)}
+                  type="button"
+                >
+                  Download JSON
+                </button>
+              ) : null}
             </div>
             <div className="table-wrap">
               <table>
                 <thead>
                   <tr>
+                    {columns.includes("sourceFile") ? <th>File</th> : null}
                     <th>Date</th>
                     <th>Description</th>
                     <th>Debit</th>
@@ -175,7 +231,8 @@ export function UploadWorkbench() {
                 </thead>
                 <tbody>
                   {previewRows.map((row) => (
-                    <tr key={row.id}>
+                    <tr key={`${row.sourceFile || "single"}-${row.id}`}>
+                      {columns.includes("sourceFile") ? <td>{row.sourceFile}</td> : null}
                       <td>{row.date}</td>
                       <td>{row.description}</td>
                       <td>{row.debit}</td>
@@ -191,8 +248,9 @@ export function UploadWorkbench() {
           <div className="empty-state">
             <p>Preview rows will appear here after a successful conversion.</p>
             <p className="muted">
-              Good next milestone: statement-specific templates, confidence scores, and accounting
-              exports like QBO/OFX.
+              {isProfessional
+                ? `Professional includes up to ${capabilities.maxFilesPerUpload} files per upload and JSON exports.`
+                : "Personal stays focused on single-file spreadsheet conversion and CSV/XLSX exports."}
             </p>
           </div>
         )}

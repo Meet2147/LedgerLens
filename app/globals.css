@@ -338,6 +338,35 @@ h3 {
   margin-top: 1.25rem;
 }
 
+.capability-summary,
+.workspace-member-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.capability-summary span,
+.workspace-member {
+  display: inline-flex;
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(13, 107, 87, 0.08);
+  color: var(--accent-strong);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.usage-line {
+  margin-top: 0.9rem;
+}
+
+.workspace-form {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
 .input-group {
   display: grid;
   gap: 0.45rem;

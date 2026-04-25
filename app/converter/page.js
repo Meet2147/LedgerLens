@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { UploadWorkbench } from "@/components/upload-workbench";
 import { getCurrentUser } from "@/lib/auth";
+import { getTierBySlug } from "@/lib/pricing";
+import { getMonthlyUsage } from "@/lib/usage";
 
 export const metadata = {
   title: "Converter | LedgerLens"
@@ -8,6 +10,13 @@ export const metadata = {
 
 export default async function ConverterPage() {
   const currentUser = await getCurrentUser();
+  const tier = getTierBySlug(currentUser?.tier || "personal");
+  const pagesUsed = currentUser ? await getMonthlyUsage(currentUser.email) : 0;
+  const capabilities = {
+    ...tier.limits,
+    tierName: tier.name,
+    pagesUsed
+  };
 
   return (
     <main className="page-shell">
@@ -26,7 +35,7 @@ export default async function ConverterPage() {
           {currentUser ? (
             <div className="status-banner">
               Signed in as <strong>{currentUser.email}</strong> on the <strong>{currentUser.tier}</strong>{" "}
-              tier.
+              tier. {pagesUsed}/{tier.limits.pagesPerMonth} pages used this month.
             </div>
           ) : (
             <div className="status-banner muted-banner">
@@ -39,7 +48,7 @@ export default async function ConverterPage() {
         </div>
       </section>
 
-      <UploadWorkbench />
+      <UploadWorkbench capabilities={capabilities} currentUser={currentUser} />
     </main>
   );
 }
