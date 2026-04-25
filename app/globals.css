@@ -87,6 +87,19 @@ select {
   letter-spacing: -0.04em;
 }
 
+.brand-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.brand-mark {
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 10px 20px rgba(13, 107, 87, 0.16));
+}
+
 .brand-tag {
   color: var(--muted);
   font-size: 0.9rem;

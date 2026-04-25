@@ -5,7 +5,12 @@ import { getCurrentUser } from "@/lib/auth";
 export const metadata = {
   title: "LedgerLens | Convert Bank Statements to Excel and CSV",
   description:
-    "Password-aware bank statement conversion for accountants, finance teams, and operators."
+    "Password-aware bank statement conversion for accountants, finance teams, and operators.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg"
+  }
 };
 
 export default async function RootLayout({ children }) {

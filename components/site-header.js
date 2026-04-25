@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/brand-mark";
 
 function formatTier(tier = "") {
   if (!tier) {
@@ -12,8 +13,9 @@ export function SiteHeader({ currentUser }) {
   return (
     <header className="site-header">
       <div className="brand-lockup">
-        <Link className="brand" href="/">
-          LedgerLens
+        <Link className="brand brand-row" href="/">
+          <BrandMark />
+          <span>LedgerLens</span>
         </Link>
         <span className="brand-tag">Bank statements to Excel and CSV</span>
       </div>
