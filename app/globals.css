@@ -520,6 +520,19 @@ td:nth-child(2) {
   gap: 0.35rem;
 }
 
+.original-price-line {
+  display: flex;
+  align-items: center;
+}
+
+.original-price-line span {
+  color: #c9342f;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
 .price-line {
   display: flex;
   align-items: flex-end;

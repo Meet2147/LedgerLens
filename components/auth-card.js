@@ -106,7 +106,9 @@ export function AuthCard({
         <div className="auth-plan-summary">
           <strong>{selectedPlan.name}</strong>
           <span>
-            {selectedBilling === "annual" ? selectedPlan.annualPrice : selectedPlan.monthlyPrice}
+            {selectedBilling === "annual"
+              ? `${selectedPlan.annualPrice} / year`
+              : `${selectedPlan.monthlyPrice} / month`}
           </span>
         </div>
       </div>

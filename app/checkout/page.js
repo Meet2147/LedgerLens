@@ -49,7 +49,9 @@ export default async function CheckoutPage({ searchParams }) {
               {tier.name} · {billingCycle}
             </h3>
             <p className="muted">
-              {billingCycle === "annual" ? tier.annualPrice : tier.monthlyPrice}
+              {billingCycle === "annual"
+                ? `${tier.annualPrice} / year`
+                : `${tier.monthlyPrice} / month`}
             </p>
           </div>
         </div>

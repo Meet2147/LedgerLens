@@ -50,6 +50,11 @@ export function PricingToggleSection() {
             <p>{tier.description}</p>
 
             <div className="price-stack">
+              {billingCycle === "annual" ? (
+                <div className="original-price-line">
+                  <span>{tier.annualOriginalPrice}</span>
+                </div>
+              ) : null}
               <div className="price-line">
                 <span>{getDisplayedPrice(tier, billingCycle)}</span>
                 <small>{getPeriodLabel(billingCycle)}</small>
