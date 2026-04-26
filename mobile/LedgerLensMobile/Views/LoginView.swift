@@ -9,8 +9,7 @@ struct LoginView: View {
                 Spacer(minLength: 24)
 
                 VStack(spacing: 14) {
-                    BrandHeroMark(accent: .sky)
-                        .frame(width: 118, height: 118)
+                    BrandLockup(style: .compact)
 
                     Text("Sign in with the same email you use on the web app and keep your conversions synced across devices.")
                         .foregroundColor(BrandPalette.muted)

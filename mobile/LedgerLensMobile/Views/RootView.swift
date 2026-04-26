@@ -69,8 +69,7 @@ private struct OnboardingView: View {
                     VStack(spacing: 28) {
                         Spacer(minLength: 16)
 
-                        BrandHeroMark(accent: page.accent)
-                            .frame(width: 156, height: 156)
+                        BrandLockup(style: .hero)
 
                         VStack(spacing: 14) {
                             Text(page.title)
@@ -158,57 +157,119 @@ private struct OnboardingView: View {
     }
 }
 
-struct BrandHeroMark: View {
-    var accent: BrandAccent = .sky
+struct BrandLockup: View {
+    enum Style {
+        case hero
+        case compact
 
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(
-                    LinearGradient(
-                        colors: [accentColor.opacity(0.18), BrandPalette.sky.opacity(0.16), BrandPalette.lilac.opacity(0.16)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
+        var markSize: CGFloat {
+            switch self {
+            case .hero:
+                return 92
+            case .compact:
+                return 72
+            }
+        }
 
-            RoundedRectangle(cornerRadius: 36, style: .continuous)
-                .fill(.white.opacity(0.92))
-                .padding(20)
-                .shadow(color: .black.opacity(0.05), radius: 16, y: 8)
+        var titleFont: Font {
+            switch self {
+            case .hero:
+                return .system(size: 28, weight: .bold, design: .rounded)
+            case .compact:
+                return .system(size: 22, weight: .bold, design: .rounded)
+            }
+        }
 
-            VStack(spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [BrandPalette.aqua, BrandPalette.sky, BrandPalette.lilac],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 70, height: 70)
-
-                    Image(systemName: "doc.text.magnifyingglass")
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(.white)
-                }
-
-                Text("LedgerLens")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [BrandPalette.aqua, BrandPalette.sky, BrandPalette.lilac],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+        var spacing: CGFloat {
+            switch self {
+            case .hero:
+                return 18
+            case .compact:
+                return 14
             }
         }
     }
 
-    private var accentColor: Color {
-        accent.color
+    var style: Style = .compact
+
+    var body: some View {
+        VStack(spacing: style.spacing) {
+            LedgerLensMark()
+                .frame(width: style.markSize, height: style.markSize)
+
+            Text("LedgerLens")
+                .font(style.titleFont)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [BrandPalette.aqua, BrandPalette.sky, BrandPalette.lilac],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+        }
+    }
+}
+
+struct LedgerLensMark: View {
+    var body: some View {
+        GeometryReader { geometry in
+            let size = min(geometry.size.width, geometry.size.height)
+            let unit = size / 64
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 18 * unit, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [BrandPalette.aqua, BrandPalette.sky, BrandPalette.lilac],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 56 * unit, height: 56 * unit)
+
+                Path { path in
+                    path.move(to: CGPoint(x: 21 * unit, y: 18 * unit))
+                    path.addLine(to: CGPoint(x: 29 * unit, y: 18 * unit))
+                    path.addLine(to: CGPoint(x: 29 * unit, y: 42 * unit))
+                    path.addLine(to: CGPoint(x: 47 * unit, y: 42 * unit))
+                    path.addLine(to: CGPoint(x: 47 * unit, y: 50 * unit))
+                    path.addLine(to: CGPoint(x: 21 * unit, y: 50 * unit))
+                    path.closeSubpath()
+                }
+                .fill(Color(red: 1.0, green: 0.98, blue: 0.95))
+
+                Path { path in
+                    path.addRoundedRect(
+                        in: CGRect(x: 36 * unit, y: 18 * unit, width: 8 * unit, height: 15 * unit),
+                        cornerSize: CGSize(width: 1.5 * unit, height: 1.5 * unit)
+                    )
+                }
+                .fill(Color(red: 1.0, green: 0.98, blue: 0.95).opacity(0.86))
+
+                Circle()
+                    .fill(BrandPalette.ink.opacity(0.12))
+                    .frame(width: 18 * unit, height: 18 * unit)
+                    .position(x: 44 * unit, y: 42 * unit)
+
+                Circle()
+                    .stroke(Color(red: 1.0, green: 0.98, blue: 0.95), lineWidth: 3 * unit)
+                    .frame(width: 13 * unit, height: 13 * unit)
+                    .position(x: 44 * unit, y: 42 * unit)
+
+                Path { path in
+                    path.move(to: CGPoint(x: 48.8 * unit, y: 46.8 * unit))
+                    path.addLine(to: CGPoint(x: 53 * unit, y: 51 * unit))
+                }
+                .stroke(
+                    Color(red: 1.0, green: 0.98, blue: 0.95),
+                    style: StrokeStyle(lineWidth: 3 * unit, lineCap: .round)
+                )
+            }
+            .frame(width: size, height: size)
+        }
+        .aspectRatio(1, contentMode: .fit)
+        .accessibilityLabel("LedgerLens")
+        .accessibilityElement(children: .ignore)
     }
 }
 
