@@ -235,9 +235,7 @@ struct MobileConverterView: View {
                             .font(.headline)
                             .foregroundColor(BrandPalette.ink)
 
-                        ForEach(Array(result.rows.prefix(12))) { row in
-                            transactionCard(row: row)
-                        }
+                        transactionTable(rows: Array(result.rows.prefix(12)))
 
                         if result.rows.count > 12 {
                             Text("Showing the first 12 rows. Export to open the full result.")
@@ -322,43 +320,69 @@ struct MobileConverterView: View {
         }
     }
 
-    private func transactionCard(row: TransactionRow) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if let sourceFile = row.sourceFile, !sourceFile.isEmpty {
-                Text(sourceFile)
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(BrandPalette.sky)
-            }
+    private func transactionTable(rows: [TransactionRow]) -> some View {
+        let includesSourceFile = rows.contains { ($0.sourceFile ?? "").isEmpty == false }
 
-            Text(row.description)
-                .font(.subheadline.weight(.semibold))
-                .foregroundColor(BrandPalette.ink)
+        return ScrollView(.horizontal, showsIndicators: false) {
+            VStack(spacing: 0) {
+                HStack(spacing: 0) {
+                    if includesSourceFile {
+                        tableHeaderCell("File", width: 180)
+                    }
+                    tableHeaderCell("Date", width: 110)
+                    tableHeaderCell("Description", width: 250)
+                    tableHeaderCell("Debit", width: 110)
+                    tableHeaderCell("Credit", width: 110)
+                    tableHeaderCell("Balance", width: 120)
+                }
 
-            Text(row.date)
-                .font(.footnote)
-                .foregroundColor(BrandPalette.muted)
-
-            HStack(spacing: 12) {
-                amountPill(label: "Debit", value: row.debit)
-                amountPill(label: "Credit", value: row.credit)
-                amountPill(label: "Balance", value: row.balance)
+                ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                    HStack(spacing: 0) {
+                        if includesSourceFile {
+                            tableBodyCell(row.sourceFile ?? "-", width: 180, alignment: .leading, isEmphasized: false)
+                        }
+                        tableBodyCell(row.date, width: 110, alignment: .leading, isEmphasized: false)
+                        tableBodyCell(row.description, width: 250, alignment: .leading, isEmphasized: true)
+                        tableBodyCell(row.debit.isEmpty ? "-" : row.debit, width: 110, alignment: .trailing, isEmphasized: false)
+                        tableBodyCell(row.credit.isEmpty ? "-" : row.credit, width: 110, alignment: .trailing, isEmphasized: false)
+                        tableBodyCell(row.balance.isEmpty ? "-" : row.balance, width: 120, alignment: .trailing, isEmphasized: false)
+                    }
+                    .background(index.isMultiple(of: 2) ? BrandPalette.surfaceStrong : Color.white.opacity(0.72))
+                }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 18))
+        .background(.white.opacity(0.88), in: RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(BrandPalette.sky.opacity(0.10), lineWidth: 1)
+        )
     }
 
-    private func amountPill(label: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label)
-                .font(.caption.weight(.semibold))
-                .foregroundColor(BrandPalette.muted)
-            Text(value.isEmpty ? "-" : value)
-                .font(.footnote.weight(.semibold))
-                .foregroundColor(BrandPalette.ink)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    private func tableHeaderCell(_ title: String, width: CGFloat) -> some View {
+        Text(title)
+            .font(.caption.weight(.bold))
+            .foregroundColor(BrandPalette.ink)
+            .textCase(.uppercase)
+            .frame(width: width, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 12)
+            .background(BrandPalette.sky.opacity(0.10))
+    }
+
+    private func tableBodyCell(
+        _ value: String,
+        width: CGFloat,
+        alignment: Alignment,
+        isEmphasized: Bool
+    ) -> some View {
+        Text(value)
+            .font(isEmphasized ? .subheadline.weight(.semibold) : .subheadline)
+            .foregroundColor(isEmphasized ? BrandPalette.ink : BrandPalette.muted)
+            .lineLimit(3)
+            .multilineTextAlignment(alignment == .trailing ? .trailing : .leading)
+            .frame(width: width, alignment: alignment)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 12)
     }
 
     private func handleFileSelection(_ result: Result<[URL], Error>) {
