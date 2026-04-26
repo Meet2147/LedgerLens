@@ -66,6 +66,45 @@ function downloadJson(rows, fileName) {
   URL.revokeObjectURL(url);
 }
 
+function normalizeConversionResult(payload) {
+  const rows = Array.isArray(payload?.rows) ? payload.rows : [];
+  const trialPayload = payload?.trial && typeof payload.trial === "object" ? payload.trial : {};
+
+  return {
+    fileStem: typeof payload?.fileStem === "string" && payload.fileStem ? payload.fileStem : "statement",
+    pageCount: Number.isFinite(payload?.pageCount) ? payload.pageCount : 0,
+    rows,
+    queuePriority: typeof payload?.queuePriority === "string" ? payload.queuePriority : "standard",
+    pagesUsedThisMonth: Number.isFinite(payload?.pagesUsedThisMonth) ? payload.pagesUsedThisMonth : null,
+    pagesRemainingThisMonth: Number.isFinite(payload?.pagesRemainingThisMonth)
+      ? payload.pagesRemainingThisMonth
+      : null,
+    exportFormats: Array.isArray(payload?.exportFormats) ? payload.exportFormats : [],
+    trial: {
+      isActive: Boolean(trialPayload.isActive),
+      pdfsUsed: Number.isFinite(trialPayload.pdfsUsed) ? trialPayload.pdfsUsed : 0,
+      pdfLimit: Number.isFinite(trialPayload.pdfLimit) ? trialPayload.pdfLimit : 5,
+      pagesUsed: Number.isFinite(trialPayload.pagesUsed) ? trialPayload.pagesUsed : 0,
+      pageLimit: Number.isFinite(trialPayload.pageLimit) ? trialPayload.pageLimit : 50,
+      endsAt: typeof trialPayload.endsAt === "string" ? trialPayload.endsAt : null
+    }
+  };
+}
+
+function formatTrialEndsAt(value) {
+  if (!value) {
+    return "your trial window";
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "your trial window";
+  }
+
+  return parsed.toLocaleDateString("en-IN");
+}
+
 export function UploadWorkbench({ capabilities, currentUser }) {
   const [files, setFiles] = useState([]);
   const [password, setPassword] = useState("");
@@ -115,13 +154,20 @@ export function UploadWorkbench({ capabilities, currentUser }) {
           body: payload
         });
 
-        const data = await response.json();
+        const rawText = await response.text();
+        let data = {};
+
+        try {
+          data = rawText ? JSON.parse(rawText) : {};
+        } catch {
+          data = { error: rawText || "We could not convert that statement yet." };
+        }
 
         if (!response.ok) {
           throw new Error(data.error || "We could not convert that statement yet.");
         }
 
-        setResult(data);
+        setResult(normalizeConversionResult(data));
       } catch (submitError) {
         setError(submitError.message);
       }
@@ -182,11 +228,11 @@ export function UploadWorkbench({ capabilities, currentUser }) {
           <>
             <div className="result-summary">
               <div>
-                <strong>{result.rows.length}</strong>
+                <strong>{Array.isArray(result.rows) ? result.rows.length : 0}</strong>
                 <span>rows detected</span>
               </div>
               <div>
-                <strong>{result.pageCount}</strong>
+                <strong>{result.pageCount ?? 0}</strong>
                 <span>pages processed</span>
               </div>
             </div>
@@ -194,7 +240,7 @@ export function UploadWorkbench({ capabilities, currentUser }) {
               <p className="muted usage-line">
                 {currentUser.paymentStatus === "paid"
                   ? `${result.pagesUsedThisMonth} pages used this month · ${result.pagesRemainingThisMonth} pages remaining · ${result.queuePriority} processing`
-                  : `${result.trial.pdfsUsed}/${result.trial.pdfLimit} PDFs used · ${result.trial.pagesUsed}/${result.trial.pageLimit} pages used · Trial ends ${new Date(result.trial.endsAt).toLocaleDateString("en-IN")}`}
+                  : `${result.trial.pdfsUsed}/${result.trial.pdfLimit} PDFs used · ${result.trial.pagesUsed}/${result.trial.pageLimit} pages used · Trial ends ${formatTrialEndsAt(result.trial.endsAt)}`}
               </p>
             ) : (
               <p className="muted usage-line">
@@ -239,8 +285,8 @@ export function UploadWorkbench({ capabilities, currentUser }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {previewRows.map((row) => (
-                    <tr key={`${row.sourceFile || "single"}-${row.id}`}>
+                  {previewRows.map((row, index) => (
+                    <tr key={`${row.sourceFile || "single"}-${row.id || index}`}>
                       {columns.includes("sourceFile") ? <td>{row.sourceFile}</td> : null}
                       <td>{row.date}</td>
                       <td>{row.description}</td>
