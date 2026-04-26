@@ -111,6 +111,11 @@ export function UploadWorkbench({ capabilities, currentUser }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const availableExportFormats = Array.isArray(capabilities?.exportFormats)
+    ? capabilities.exportFormats
+    : Array.isArray(capabilities?.exports)
+      ? capabilities.exports
+      : [];
   const columns = useMemo(
     () => getColumns((result?.rows || []).some((row) => row.sourceFile)),
     [result]
@@ -262,7 +267,7 @@ export function UploadWorkbench({ capabilities, currentUser }) {
               >
                 Download XLSX
               </button>
-              {capabilities.exportFormats.includes("json") ? (
+              {availableExportFormats.includes("json") ? (
                 <button
                   className="secondary-button"
                   onClick={() => downloadJson(result.rows, result.fileStem)}
