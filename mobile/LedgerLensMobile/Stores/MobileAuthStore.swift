@@ -7,11 +7,23 @@ final class MobileAuthStore: ObservableObject {
     @Published var email: String = ""
     @Published var errorMessage: String = ""
     @Published var isLoading = false
+    @Published var isBootstrapping = false
 
     @AppStorage("ledgerlens.mobile.didCompleteOnboarding") var didCompleteOnboarding = false
+    @AppStorage("ledgerlens.mobile.savedAccount") private var savedAccountData = ""
 
     var isLoggedIn: Bool {
         account != nil
+    }
+
+    init() {
+        if
+            let data = savedAccountData.data(using: .utf8),
+            let decoded = try? JSONDecoder().decode(AccountSummary.self, from: data)
+        {
+            account = decoded
+            email = decoded.email
+        }
     }
 
     func login() async {
@@ -27,6 +39,7 @@ final class MobileAuthStore: ObservableObject {
             let summary = try await MobileAPI.shared.login(email: email)
             account = summary
             email = summary.email
+            persistAccount(summary)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -38,14 +51,33 @@ final class MobileAuthStore: ObservableObject {
         guard let account else { return }
 
         do {
-            self.account = try await MobileAPI.shared.fetchAccountSummary(email: account.email)
+            let refreshed = try await MobileAPI.shared.fetchAccountSummary(email: account.email)
+            self.account = refreshed
+            persistAccount(refreshed)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
+    func bootstrap() async {
+        guard !isBootstrapping else { return }
+        guard let account else { return }
+
+        isBootstrapping = true
+        await refresh()
+        isBootstrapping = false
+    }
+
     func logout() {
         account = nil
+        savedAccountData = ""
         errorMessage = ""
+    }
+
+    private func persistAccount(_ summary: AccountSummary) {
+        if let data = try? JSONEncoder().encode(summary),
+           let string = String(data: data, encoding: .utf8) {
+            savedAccountData = string
+        }
     }
 }

@@ -11,6 +11,9 @@ struct MobileAccountView: View {
                 ScrollView(showsIndicators: false) {
                     if let account = authStore.account {
                         VStack(spacing: 16) {
+                            BrandLockup(style: .compact)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
                             VStack(alignment: .leading, spacing: 10) {
                                 Text(account.email)
                                     .font(.title3.weight(.bold))
@@ -24,6 +27,20 @@ struct MobileAccountView: View {
                             .padding(20)
                             .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
                             .foregroundColor(BrandPalette.muted)
+
+                            if account.paymentStatus == "paid" && account.tier == "personal" && account.billingCycle == "annual" {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("What Professional adds")
+                                        .font(.headline)
+                                        .foregroundColor(BrandPalette.ink)
+
+                                    Text("Multiple PDFs support, merged batch exports, JSON export, shared workspace seats, and priority processing are still available as your next upgrade.")
+                                        .foregroundColor(BrandPalette.muted)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(20)
+                                .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+                            }
 
                             Button("Refresh account") {
                                 Task { await authStore.refresh() }

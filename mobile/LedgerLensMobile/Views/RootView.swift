@@ -12,7 +12,15 @@ struct RootView: View {
             )
             .ignoresSafeArea()
 
-            if !authStore.didCompleteOnboarding {
+            if authStore.isBootstrapping {
+                VStack(spacing: 18) {
+                    BrandLockup(style: .hero)
+                    ProgressView()
+                        .tint(BrandPalette.sky)
+                    Text("Restoring your LedgerLens workspace…")
+                        .foregroundColor(BrandPalette.muted)
+                }
+            } else if !authStore.didCompleteOnboarding {
                 OnboardingView()
             } else if authStore.isLoggedIn {
                 MainTabView()
@@ -21,6 +29,9 @@ struct RootView: View {
             }
         }
         .preferredColorScheme(.light)
+        .task {
+            await authStore.bootstrap()
+        }
     }
 }
 

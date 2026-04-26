@@ -7,34 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A10000000000000000000001 /* LedgerLensMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000101 /* LedgerLensMobileApp.swift */; };
-		A10000000000000000000002 /* Models/AccountSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000102 /* Models/AccountSummary.swift */; };
-		A10000000000000000000003 /* Models/ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000103 /* Models/ConversionResult.swift */; };
-		A10000000000000000000004 /* Theme/BrandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000104 /* Theme/BrandPalette.swift */; };
-		A10000000000000000000005 /* Services/MobileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000105 /* Services/MobileAPI.swift */; };
-		A10000000000000000000006 /* Stores/MobileAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* Stores/MobileAuthStore.swift */; };
-		A10000000000000000000007 /* Views/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* Views/RootView.swift */; };
-		A10000000000000000000008 /* Views/LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000108 /* Views/LoginView.swift */; };
-		A10000000000000000000009 /* Views/MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000109 /* Views/MainTabView.swift */; };
-		A1000000000000000000000A /* Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010A /* Views/DashboardView.swift */; };
-		A1000000000000000000000B /* Views/MobileConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010B /* Views/MobileConverterView.swift */; };
-		A1000000000000000000000C /* Views/MobileAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010C /* Views/MobileAccountView.swift */; };
+		A10000000000000000000001 /* ../LedgerLensMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000101 /* ../LedgerLensMobileApp.swift */; };
+		A10000000000000000000002 /* ../../Models/AccountSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000102 /* ../../Models/AccountSummary.swift */; };
+		A10000000000000000000003 /* ../../Models/ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000103 /* ../../Models/ConversionResult.swift */; };
+		A10000000000000000000004 /* ../../Theme/BrandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000104 /* ../../Theme/BrandPalette.swift */; };
+		A10000000000000000000005 /* ../../Services/MobileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000105 /* ../../Services/MobileAPI.swift */; };
+		A10000000000000000000006 /* ../../Stores/MobileAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* ../../Stores/MobileAuthStore.swift */; };
+		A10000000000000000000007 /* ../../Views/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* ../../Views/RootView.swift */; };
+		A10000000000000000000008 /* ../../Views/LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000108 /* ../../Views/LoginView.swift */; };
+		A10000000000000000000009 /* ../../Views/MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000109 /* ../../Views/MainTabView.swift */; };
+		A1000000000000000000000A /* ../../Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010A /* ../../Views/DashboardView.swift */; };
+		A1000000000000000000000B /* ../../Views/MobileConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010B /* ../../Views/MobileConverterView.swift */; };
+		A1000000000000000000000C /* ../../Views/MobileAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010C /* ../../Views/MobileAccountView.swift */; };
 		A1000000000000000000000D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000101 /* LedgerLensMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../LedgerLensMobileApp.swift; sourceTree = "<group>"; };
-		A10000000000000000000102 /* Models/AccountSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/AccountSummary.swift; sourceTree = "<group>"; };
-		A10000000000000000000103 /* Models/ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/ConversionResult.swift; sourceTree = "<group>"; };
-		A10000000000000000000104 /* Theme/BrandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Theme/BrandPalette.swift; sourceTree = "<group>"; };
-		A10000000000000000000105 /* Services/MobileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Services/MobileAPI.swift; sourceTree = "<group>"; };
-		A10000000000000000000106 /* Stores/MobileAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Stores/MobileAuthStore.swift; sourceTree = "<group>"; };
-		A10000000000000000000107 /* Views/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/RootView.swift; sourceTree = "<group>"; };
-		A10000000000000000000108 /* Views/LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/LoginView.swift; sourceTree = "<group>"; };
-		A10000000000000000000109 /* Views/MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MainTabView.swift; sourceTree = "<group>"; };
-		A1000000000000000000010A /* Views/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/DashboardView.swift; sourceTree = "<group>"; };
-		A1000000000000000000010B /* Views/MobileConverterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileConverterView.swift; sourceTree = "<group>"; };
-		A1000000000000000000010C /* Views/MobileAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileAccountView.swift; sourceTree = "<group>"; };
+		A10000000000000000000101 /* ../LedgerLensMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../LedgerLensMobileApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000102 /* ../../Models/AccountSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/AccountSummary.swift; sourceTree = "<group>"; };
+		A10000000000000000000103 /* ../../Models/ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/ConversionResult.swift; sourceTree = "<group>"; };
+		A10000000000000000000104 /* ../../Theme/BrandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Theme/BrandPalette.swift; sourceTree = "<group>"; };
+		A10000000000000000000105 /* ../../Services/MobileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Services/MobileAPI.swift; sourceTree = "<group>"; };
+		A10000000000000000000106 /* ../../Stores/MobileAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Stores/MobileAuthStore.swift; sourceTree = "<group>"; };
+		A10000000000000000000107 /* ../../Views/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/RootView.swift; sourceTree = "<group>"; };
+		A10000000000000000000108 /* ../../Views/LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/LoginView.swift; sourceTree = "<group>"; };
+		A10000000000000000000109 /* ../../Views/MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MainTabView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010A /* ../../Views/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/DashboardView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010B /* ../../Views/MobileConverterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileConverterView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010C /* ../../Views/MobileAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileAccountView.swift; sourceTree = "<group>"; };
 		A1000000000000000000010D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1000000000000000000010E /* LedgerLensMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = LedgerLensMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -61,7 +61,7 @@
 		A10000000000000000000032 /* LedgerLensMobile */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000101 /* LedgerLensMobileApp.swift */,
+				A10000000000000000000101 /* ../LedgerLensMobileApp.swift */,
 				A1000000000000000000010D /* Assets.xcassets */,
 				A10000000000000000000034 /* Models */,
 				A10000000000000000000035 /* Theme */,
@@ -83,8 +83,8 @@
 		A10000000000000000000034 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000102 /* Models/AccountSummary.swift */,
-				A10000000000000000000103 /* Models/ConversionResult.swift */,
+				A10000000000000000000102 /* ../../Models/AccountSummary.swift */,
+				A10000000000000000000103 /* ../../Models/ConversionResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -92,7 +92,7 @@
 		A10000000000000000000035 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000104 /* Theme/BrandPalette.swift */,
+				A10000000000000000000104 /* ../../Theme/BrandPalette.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -100,7 +100,7 @@
 		A10000000000000000000036 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000105 /* Services/MobileAPI.swift */,
+				A10000000000000000000105 /* ../../Services/MobileAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 		A10000000000000000000037 /* Stores */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000106 /* Stores/MobileAuthStore.swift */,
+				A10000000000000000000106 /* ../../Stores/MobileAuthStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -116,12 +116,12 @@
 		A10000000000000000000038 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000107 /* Views/RootView.swift */,
-				A10000000000000000000108 /* Views/LoginView.swift */,
-				A10000000000000000000109 /* Views/MainTabView.swift */,
-				A1000000000000000000010A /* Views/DashboardView.swift */,
-				A1000000000000000000010B /* Views/MobileConverterView.swift */,
-				A1000000000000000000010C /* Views/MobileAccountView.swift */,
+				A10000000000000000000107 /* ../../Views/RootView.swift */,
+				A10000000000000000000108 /* ../../Views/LoginView.swift */,
+				A10000000000000000000109 /* ../../Views/MainTabView.swift */,
+				A1000000000000000000010A /* ../../Views/DashboardView.swift */,
+				A1000000000000000000010B /* ../../Views/MobileConverterView.swift */,
+				A1000000000000000000010C /* ../../Views/MobileAccountView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -154,7 +154,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					A10000000000000000000041 = {
 						CreatedOnToolsVersion = 26.2;
@@ -195,18 +195,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000000000000000000001 /* LedgerLensMobileApp.swift in Sources */,
-				A10000000000000000000002 /* Models/AccountSummary.swift in Sources */,
-				A10000000000000000000003 /* Models/ConversionResult.swift in Sources */,
-				A10000000000000000000004 /* Theme/BrandPalette.swift in Sources */,
-				A10000000000000000000005 /* Services/MobileAPI.swift in Sources */,
-				A10000000000000000000006 /* Stores/MobileAuthStore.swift in Sources */,
-				A10000000000000000000007 /* Views/RootView.swift in Sources */,
-				A10000000000000000000008 /* Views/LoginView.swift in Sources */,
-				A10000000000000000000009 /* Views/MainTabView.swift in Sources */,
-				A1000000000000000000000A /* Views/DashboardView.swift in Sources */,
-				A1000000000000000000000B /* Views/MobileConverterView.swift in Sources */,
-				A1000000000000000000000C /* Views/MobileAccountView.swift in Sources */,
+				A10000000000000000000001 /* ../LedgerLensMobileApp.swift in Sources */,
+				A10000000000000000000002 /* ../../Models/AccountSummary.swift in Sources */,
+				A10000000000000000000003 /* ../../Models/ConversionResult.swift in Sources */,
+				A10000000000000000000004 /* ../../Theme/BrandPalette.swift in Sources */,
+				A10000000000000000000005 /* ../../Services/MobileAPI.swift in Sources */,
+				A10000000000000000000006 /* ../../Stores/MobileAuthStore.swift in Sources */,
+				A10000000000000000000007 /* ../../Views/RootView.swift in Sources */,
+				A10000000000000000000008 /* ../../Views/LoginView.swift in Sources */,
+				A10000000000000000000009 /* ../../Views/MainTabView.swift in Sources */,
+				A1000000000000000000000A /* ../../Views/DashboardView.swift in Sources */,
+				A1000000000000000000000B /* ../../Views/MobileConverterView.swift in Sources */,
+				A1000000000000000000000C /* ../../Views/MobileAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,9 +219,30 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = C9NLF34677;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -231,7 +252,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 			};
 			name = Debug;
@@ -242,10 +265,30 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = C9NLF34677;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -256,6 +299,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -267,7 +311,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LedgerLensMobile/Preview Content\"";
-				DEVELOPMENT_TEAM = C9NLF34677;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;
@@ -299,7 +342,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C9NLF34677;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;

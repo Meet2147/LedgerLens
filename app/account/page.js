@@ -22,6 +22,12 @@ export default async function AccountPage({ searchParams }) {
   const workspaceMembers = currentUser.workspaceMembers || [];
   const workspaceSeatsRemaining = Math.max(0, tier.limits.maxWorkspaceUsers - 1 - workspaceMembers.length);
   const trialActive = isTrialActive(currentUser);
+  const isPaid = currentUser.paymentStatus === "paid";
+  const isProfessionalAnnual = isPaid && currentUser.tier === "professional" && currentUser.billingCycle === "annual";
+  const isPersonalAnnual = isPaid && currentUser.tier === "personal" && currentUser.billingCycle === "annual";
+  const professionalTier = getTierBySlug("professional");
+  const currentTierFeatures = Array.isArray(tier.features) ? tier.features : [];
+  const missingProfessionalFeatures = professionalTier.features.filter((feature) => !currentTierFeatures.includes(feature));
 
   return (
     <main className="page-shell">
@@ -47,7 +53,7 @@ export default async function AccountPage({ searchParams }) {
           </div>
           <div className="panel">
             <div className="eyebrow">Tier</div>
-            <h3>{currentUser.tier}</h3>
+            <h3>{tier.name}</h3>
             <p className="muted">Updated {new Date(currentUser.updatedAt).toLocaleDateString("en-IN")}</p>
           </div>
           <div className="panel">
@@ -55,14 +61,16 @@ export default async function AccountPage({ searchParams }) {
             <h3>{currentUser.billingCycle || "monthly"}</h3>
             <p className="muted">Payment status: {currentUser.paymentStatus || "pending"}</p>
           </div>
-          <div className="panel">
-            <div className="eyebrow">Trial</div>
-            <h3>{trialActive ? "Active" : "Ended"}</h3>
-            <p className="muted">
-              {trialUsage.pdfsUsed}/5 PDFs · {trialUsage.pagesUsed}/50 pages · ends{" "}
-              {currentUser.trialEndsAt ? new Date(currentUser.trialEndsAt).toLocaleDateString("en-IN") : "-"}
-            </p>
-          </div>
+          {!isPaid ? (
+            <div className="panel">
+              <div className="eyebrow">Trial</div>
+              <h3>{trialActive ? "Active" : "Ended"}</h3>
+              <p className="muted">
+                {trialUsage.pdfsUsed}/5 PDFs · {trialUsage.pagesUsed}/50 pages · ends{" "}
+                {currentUser.trialEndsAt ? new Date(currentUser.trialEndsAt).toLocaleDateString("en-IN") : "-"}
+              </p>
+            </div>
+          ) : null}
           <div className="panel">
             <div className="eyebrow">Usage</div>
             <h3>
@@ -81,6 +89,26 @@ export default async function AccountPage({ searchParams }) {
             <h3>{tier.limits.exports.join(", ").toUpperCase()}</h3>
             <p className="muted">{tier.limits.supportLevel}</p>
           </div>
+          {isProfessionalAnnual ? (
+            <div className="panel">
+              <div className="eyebrow">Subscription</div>
+              <h3>Professional annual is active</h3>
+              <p className="muted">
+                Your highest self-serve plan is already active, so no other subscription options are shown here.
+              </p>
+            </div>
+          ) : null}
+          {isPersonalAnnual ? (
+            <div className="panel">
+              <div className="eyebrow">Upgrade path</div>
+              <h3>Professional features you are missing</h3>
+              <ul className="bullet-list">
+                {missingProfessionalFeatures.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <div className="panel">
             <div className="eyebrow">Workspace</div>
             <h3>{tier.limits.maxWorkspaceUsers} user plan</h3>
@@ -110,15 +138,19 @@ export default async function AccountPage({ searchParams }) {
         </div>
 
         <div className="cta-row">
-          <Link className="primary-button" href={`/checkout?tier=${currentUser.tier}&billing=${currentUser.billingCycle || "monthly"}`}>
-            Open checkout
-          </Link>
           <Link className="primary-button" href="/converter">
             Open converter
           </Link>
-          <Link className="secondary-button" href="/pricing">
-            Compare plans
-          </Link>
+          {!isProfessionalAnnual ? (
+            <Link className="primary-button" href={`/checkout?tier=${currentUser.tier}&billing=${currentUser.billingCycle || "monthly"}`}>
+              Open checkout
+            </Link>
+          ) : null}
+          {!isProfessionalAnnual ? (
+            <Link className="secondary-button" href="/pricing">
+              {isPersonalAnnual ? "Upgrade to Professional" : "Compare plans"}
+            </Link>
+          ) : null}
         </div>
       </section>
     </main>
