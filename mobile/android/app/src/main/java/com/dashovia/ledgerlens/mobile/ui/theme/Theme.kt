@@ -1,0 +1,33 @@
+package com.dashovia.ledgerlens.mobile.ui.theme
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+
+private val LightColors = lightColorScheme(
+    primary = Sky,
+    secondary = Aqua,
+    tertiary = Lilac,
+    background = Mist,
+    surface = androidx.compose.ui.graphics.Color.White,
+    onBackground = Ink,
+    onSurface = Ink
+)
+
+private val DarkColors = darkColorScheme(
+    primary = Aqua,
+    secondary = Sky,
+    tertiary = Lilac
+)
+
+@Composable
+fun LedgerLensTheme(
+    darkTheme: Boolean = false,
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colorScheme = if (darkTheme) DarkColors else LightColors,
+        content = content
+    )
+}

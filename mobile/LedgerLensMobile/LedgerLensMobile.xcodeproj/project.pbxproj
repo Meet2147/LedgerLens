@@ -1,0 +1,352 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* LedgerLensMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000101 /* LedgerLensMobileApp.swift */; };
+		A10000000000000000000002 /* Models/AccountSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000102 /* Models/AccountSummary.swift */; };
+		A10000000000000000000003 /* Models/ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000103 /* Models/ConversionResult.swift */; };
+		A10000000000000000000004 /* Theme/BrandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000104 /* Theme/BrandPalette.swift */; };
+		A10000000000000000000005 /* Services/MobileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000105 /* Services/MobileAPI.swift */; };
+		A10000000000000000000006 /* Stores/MobileAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* Stores/MobileAuthStore.swift */; };
+		A10000000000000000000007 /* Views/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* Views/RootView.swift */; };
+		A10000000000000000000008 /* Views/LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000108 /* Views/LoginView.swift */; };
+		A10000000000000000000009 /* Views/MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000109 /* Views/MainTabView.swift */; };
+		A1000000000000000000000A /* Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010A /* Views/DashboardView.swift */; };
+		A1000000000000000000000B /* Views/MobileConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010B /* Views/MobileConverterView.swift */; };
+		A1000000000000000000000C /* Views/MobileAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010C /* Views/MobileAccountView.swift */; };
+		A1000000000000000000000D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000010D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000101 /* LedgerLensMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../LedgerLensMobileApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000102 /* Models/AccountSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/AccountSummary.swift; sourceTree = "<group>"; };
+		A10000000000000000000103 /* Models/ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Models/ConversionResult.swift; sourceTree = "<group>"; };
+		A10000000000000000000104 /* Theme/BrandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Theme/BrandPalette.swift; sourceTree = "<group>"; };
+		A10000000000000000000105 /* Services/MobileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Services/MobileAPI.swift; sourceTree = "<group>"; };
+		A10000000000000000000106 /* Stores/MobileAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Stores/MobileAuthStore.swift; sourceTree = "<group>"; };
+		A10000000000000000000107 /* Views/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/RootView.swift; sourceTree = "<group>"; };
+		A10000000000000000000108 /* Views/LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/LoginView.swift; sourceTree = "<group>"; };
+		A10000000000000000000109 /* Views/MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MainTabView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010A /* Views/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/DashboardView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010B /* Views/MobileConverterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileConverterView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010C /* Views/MobileAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../../Views/MobileAccountView.swift; sourceTree = "<group>"; };
+		A1000000000000000000010D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1000000000000000000010E /* LedgerLensMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = LedgerLensMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000031 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000032 /* LedgerLensMobile */,
+				A10000000000000000000033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000000000000000000032 /* LedgerLensMobile */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000101 /* LedgerLensMobileApp.swift */,
+				A1000000000000000000010D /* Assets.xcassets */,
+				A10000000000000000000034 /* Models */,
+				A10000000000000000000035 /* Theme */,
+				A10000000000000000000036 /* Services */,
+				A10000000000000000000037 /* Stores */,
+				A10000000000000000000038 /* Views */,
+			);
+			path = LedgerLensMobile;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000010E /* LedgerLensMobile.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000034 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000102 /* Models/AccountSummary.swift */,
+				A10000000000000000000103 /* Models/ConversionResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000035 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000104 /* Theme/BrandPalette.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000036 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000105 /* Services/MobileAPI.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000037 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000106 /* Stores/MobileAuthStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000038 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000107 /* Views/RootView.swift */,
+				A10000000000000000000108 /* Views/LoginView.swift */,
+				A10000000000000000000109 /* Views/MainTabView.swift */,
+				A1000000000000000000010A /* Views/DashboardView.swift */,
+				A1000000000000000000010B /* Views/MobileConverterView.swift */,
+				A1000000000000000000010C /* Views/MobileAccountView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000041 /* LedgerLensMobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000061 /* Build configuration list for PBXNativeTarget "LedgerLensMobile" */;
+			buildPhases = (
+				A10000000000000000000042 /* Sources */,
+				A10000000000000000000021 /* Frameworks */,
+				A10000000000000000000043 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LedgerLensMobile;
+			productName = LedgerLensMobile;
+			productReference = A1000000000000000000010E /* LedgerLensMobile.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000051 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					A10000000000000000000041 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000060 /* Build configuration list for PBXProject "LedgerLensMobile" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000031;
+			productRefGroup = A10000000000000000000033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000041 /* LedgerLensMobile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000043 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000042 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* LedgerLensMobileApp.swift in Sources */,
+				A10000000000000000000002 /* Models/AccountSummary.swift in Sources */,
+				A10000000000000000000003 /* Models/ConversionResult.swift in Sources */,
+				A10000000000000000000004 /* Theme/BrandPalette.swift in Sources */,
+				A10000000000000000000005 /* Services/MobileAPI.swift in Sources */,
+				A10000000000000000000006 /* Stores/MobileAuthStore.swift in Sources */,
+				A10000000000000000000007 /* Views/RootView.swift in Sources */,
+				A10000000000000000000008 /* Views/LoginView.swift in Sources */,
+				A10000000000000000000009 /* Views/MainTabView.swift in Sources */,
+				A1000000000000000000000A /* Views/DashboardView.swift in Sources */,
+				A1000000000000000000000B /* Views/MobileConverterView.swift in Sources */,
+				A1000000000000000000000C /* Views/MobileAccountView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000070 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		A10000000000000000000071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A10000000000000000000072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LedgerLensMobile/Preview Content\"";
+				DEVELOPMENT_TEAM = C9NLF34677;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dashovia.ledgerlens.mobile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A10000000000000000000073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C9NLF34677;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dashovia.ledgerlens.mobile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000060 /* Build configuration list for PBXProject "LedgerLensMobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000070 /* Debug */,
+				A10000000000000000000071 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000061 /* Build configuration list for PBXNativeTarget "LedgerLensMobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000072 /* Debug */,
+				A10000000000000000000073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000051 /* Project object */;
+}

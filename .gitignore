@@ -9,3 +9,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+DerivedData
+*.xcuserstate
+*.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+.gradle
+mobile/android/.idea
+mobile/android/local.properties
+mobile/android/app/build
+mobile/android/build

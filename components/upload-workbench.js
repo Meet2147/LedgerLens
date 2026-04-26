@@ -85,6 +85,11 @@ export function UploadWorkbench({ capabilities, currentUser }) {
     setError("");
     setResult(null);
 
+    if (!currentUser) {
+      setError("Please sign up or log in to use your 7-day trial.");
+      return;
+    }
+
     if (files.length === 0) {
       setError("Choose at least one bank statement PDF first.");
       return;
@@ -136,7 +141,11 @@ export function UploadWorkbench({ capabilities, currentUser }) {
           We do not store your uploaded PDF or the extracted transaction data.
         </p>
         <div className="capability-summary">
-          <span>{capabilities.pagesPerMonth} pages / month</span>
+          {currentUser?.paymentStatus === "paid" ? (
+            <span>{capabilities.pagesPerMonth} pages / month</span>
+          ) : (
+            <span>7-day trial · 5 PDFs · 50 pages total</span>
+          )}
           <span>{capabilities.maxFilesPerUpload} file{capabilities.maxFilesPerUpload === 1 ? "" : "s"} per upload</span>
           <span>{capabilities.supportLevel}</span>
           <span>{capabilities.processingPriority} processing</span>
@@ -183,13 +192,13 @@ export function UploadWorkbench({ capabilities, currentUser }) {
             </div>
             {currentUser ? (
               <p className="muted usage-line">
-                {result.pagesUsedThisMonth} pages used this month · {result.pagesRemainingThisMonth} pages
-                remaining · {result.queuePriority} processing
+                {currentUser.paymentStatus === "paid"
+                  ? `${result.pagesUsedThisMonth} pages used this month · ${result.pagesRemainingThisMonth} pages remaining · ${result.queuePriority} processing`
+                  : `${result.trial.pdfsUsed}/${result.trial.pdfLimit} PDFs used · ${result.trial.pagesUsed}/${result.trial.pageLimit} pages used · Trial ends ${new Date(result.trial.endsAt).toLocaleDateString("en-IN")}`}
               </p>
             ) : (
               <p className="muted usage-line">
-                Guest conversions use Personal plan defaults. Sign up to track usage and unlock Pro
-                features.
+                Sign in to start your 7-day trial and sync usage across web and mobile.
               </p>
             )}
             <div className="download-actions">

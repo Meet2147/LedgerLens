@@ -7,9 +7,9 @@ export const metadata = {
   description:
     "Password-aware bank statement conversion for accountants, finance teams, and operators.",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg"
+    icon: "/icon.svg?v=4",
+    shortcut: "/icon.svg?v=4",
+    apple: "/icon.svg?v=4"
   }
 };
 

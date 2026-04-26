@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, isTrialActive } from "@/lib/auth";
 import { getTierBySlug } from "@/lib/pricing";
-import { getMonthlyUsage } from "@/lib/usage";
+import { getMonthlyUsage, getTrialUsage } from "@/lib/usage";
 
 export const metadata = {
   title: "Account | LedgerLens"
@@ -18,8 +18,10 @@ export default async function AccountPage({ searchParams }) {
 
   const tier = getTierBySlug(currentUser.tier);
   const pagesUsed = await getMonthlyUsage(currentUser.email);
+  const trialUsage = await getTrialUsage(currentUser.email);
   const workspaceMembers = currentUser.workspaceMembers || [];
   const workspaceSeatsRemaining = Math.max(0, tier.limits.maxWorkspaceUsers - 1 - workspaceMembers.length);
+  const trialActive = isTrialActive(currentUser);
 
   return (
     <main className="page-shell">
@@ -54,13 +56,24 @@ export default async function AccountPage({ searchParams }) {
             <p className="muted">Payment status: {currentUser.paymentStatus || "pending"}</p>
           </div>
           <div className="panel">
+            <div className="eyebrow">Trial</div>
+            <h3>{trialActive ? "Active" : "Ended"}</h3>
+            <p className="muted">
+              {trialUsage.pdfsUsed}/5 PDFs · {trialUsage.pagesUsed}/50 pages · ends{" "}
+              {currentUser.trialEndsAt ? new Date(currentUser.trialEndsAt).toLocaleDateString("en-IN") : "-"}
+            </p>
+          </div>
+          <div className="panel">
             <div className="eyebrow">Usage</div>
             <h3>
-              {pagesUsed} / {tier.limits.pagesPerMonth} pages
+              {currentUser.paymentStatus === "paid"
+                ? `${pagesUsed} / ${tier.limits.pagesPerMonth} pages`
+                : `${trialUsage.pagesUsed} / 50 trial pages`}
             </h3>
             <p className="muted">
-              {tier.limits.maxFilesPerUpload} file{tier.limits.maxFilesPerUpload === 1 ? "" : "s"} per upload ·{" "}
-              {tier.limits.processingPriority} processing
+              {currentUser.paymentStatus === "paid"
+                ? `${tier.limits.maxFilesPerUpload} file${tier.limits.maxFilesPerUpload === 1 ? "" : "s"} per upload · ${tier.limits.processingPriority} processing`
+                : "Trial includes 5 PDFs total across web and mobile."}
             </p>
           </div>
           <div className="panel">
