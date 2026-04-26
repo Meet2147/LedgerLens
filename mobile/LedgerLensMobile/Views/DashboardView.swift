@@ -5,14 +5,18 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                if let account = authStore.account {
-                    VStack(spacing: 16) {
-                        SummaryCard(account: account)
-                        TrialCard(account: account)
-                        TierCapabilityCard(account: account)
+            ZStack {
+                Color.clear
+
+                ScrollView(showsIndicators: false) {
+                    if let account = authStore.account {
+                        VStack(spacing: 16) {
+                            SummaryCard(account: account)
+                            TrialCard(account: account)
+                            TierCapabilityCard(account: account)
+                        }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .navigationTitle("LedgerLens")
@@ -58,16 +62,31 @@ private struct TrialCard: View {
                 .font(.headline)
                 .foregroundColor(BrandPalette.ink)
 
-            Text(account.trial.isActive ? "Active" : "Ended")
+            Text(account.trial.isActive ? "Active now" : "Upgrade to continue")
                 .font(.title2.weight(.bold))
-                .foregroundColor(BrandPalette.sky)
+                .foregroundColor(account.trial.isActive ? BrandPalette.sky : BrandPalette.warning)
 
-            Text("\(account.trial.pdfsUsed)/\(account.trial.pdfLimit) PDFs • \(account.trial.pagesUsed)/\(account.trial.pageLimit) pages")
+            Text(trialMessage)
                 .foregroundColor(BrandPalette.muted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+    }
+
+    private var trialMessage: String {
+        let usage = "\(account.trial.pdfsUsed)/\(account.trial.pdfLimit) PDFs • \(account.trial.pagesUsed)/\(account.trial.pageLimit) pages"
+
+        guard account.trial.isActive else {
+            return "Your free access window has ended. Choose a paid plan on the web app to keep converting statements."
+        }
+
+        if let endsAt = account.trial.endsAt,
+           let date = ISO8601DateFormatter().date(from: endsAt) {
+            return "\(usage) • Ends \(date.formatted(date: .abbreviated, time: .omitted))"
+        }
+
+        return usage
     }
 }
 

@@ -19,5 +19,8 @@ struct MainTabView: View {
                 }
         }
         .tint(BrandPalette.sky)
+        .toolbarBackground(BrandPalette.surfaceStrong, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarColorScheme(.light, for: .tabBar)
     }
 }

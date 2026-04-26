@@ -14,25 +14,30 @@ struct MobileConverterView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    if let account = authStore.account {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Your current access")
-                                .font(.headline)
-                            Text("Tier: \(account.tierName)")
-                            Text("Files per upload: \(account.maxFilesPerUpload)")
-                            Text("Exports: \(account.exportFormats.joined(separator: ", ").uppercased())")
-                        }
-                        .padding(20)
-                        .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
-                    }
+            ZStack {
+                Color.clear
 
-                    uploadCard
-                    selectedFilesCard
-                    resultCard
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 16) {
+                        if let account = authStore.account {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Your current access")
+                                    .font(.headline)
+                                Text("Tier: \(account.tierName)")
+                                Text("Files per upload: \(account.maxFilesPerUpload)")
+                                Text("Exports: \(account.exportFormats.joined(separator: ", ").uppercased())")
+                            }
+                            .padding(20)
+                            .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+                        }
+
+                        uploadCard
+                        selectedFilesCard
+                        resultCard
+                    }
+                    .padding()
+                    .padding(.bottom, 20)
                 }
-                .padding()
             }
             .navigationTitle("Convert")
             .fileImporter(
@@ -47,6 +52,47 @@ struct MobileConverterView: View {
         }
     }
 
+    private var isTrialExpired: Bool {
+        guard let account = authStore.account else {
+            return false
+        }
+
+        return account.paymentStatus != "paid" && !account.trial.isActive
+    }
+
+    private var trialEndedCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Trial ended")
+                .font(.title3.weight(.bold))
+                .foregroundColor(BrandPalette.ink)
+
+            Text("Your 7-day trial window has ended. Choose a paid plan on the LedgerLens web app to continue converting statements on mobile and web.")
+                .foregroundColor(BrandPalette.muted)
+
+            Link(destination: URL(string: "https://ledger.dashovia.com/pricing")!) {
+                Text("View plans on the web app")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(
+                            colors: [BrandPalette.sand, BrandPalette.warning],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 18)
+                    )
+                    .foregroundColor(.white)
+            }
+        }
+        .padding(20)
+        .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+        .overlay(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(BrandPalette.warning.opacity(0.22), lineWidth: 1)
+        )
+    }
+
     private var uploadCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Upload statements")
@@ -56,35 +102,46 @@ struct MobileConverterView: View {
             Text("Pick bank statement PDFs, add a password only if the statement is protected, and convert using your existing LedgerLens access.")
                 .foregroundColor(BrandPalette.muted)
 
-            HStack(spacing: 12) {
-                Button {
-                    isPickerPresented = true
-                } label: {
-                    Label("Choose PDFs", systemImage: "doc.badge.plus")
-                        .frame(maxWidth: .infinity)
+            if isTrialExpired {
+                trialEndedCard
+            } else {
+                HStack(spacing: 12) {
+                    Button {
+                        isPickerPresented = true
+                    } label: {
+                        Label("Choose PDFs", systemImage: "doc.badge.plus")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(BrandPalette.sky)
+
+                    Button {
+                        Task { await convertStatements() }
+                    } label: {
+                        Text(isConverting ? "Converting..." : "Convert")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(BrandPalette.aqua)
+                    .disabled(isConverting || selectedDocuments.isEmpty || authStore.account == nil)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(BrandPalette.sky)
 
-                Button {
-                    Task { await convertStatements() }
-                } label: {
-                    Text(isConverting ? "Converting..." : "Convert")
-                        .frame(maxWidth: .infinity)
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Password for protected PDFs")
+                        .font(.headline)
+                        .foregroundColor(BrandPalette.ink)
+
+                    SecureField("Leave blank if the PDF is unlocked", text: $password)
+                        .foregroundColor(BrandPalette.ink)
+                        .tint(BrandPalette.sky)
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 16)
+                        .background(BrandPalette.surfaceStrong, in: RoundedRectangle(cornerRadius: 18))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 18)
+                                .stroke(BrandPalette.sky.opacity(0.12), lineWidth: 1)
+                        )
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(BrandPalette.aqua)
-                .disabled(isConverting || selectedDocuments.isEmpty || authStore.account == nil)
-            }
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Password for protected PDFs")
-                    .font(.headline)
-                    .foregroundColor(BrandPalette.ink)
-
-                SecureField("Leave blank if the PDF is unlocked", text: $password)
-                    .padding()
-                    .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 18))
             }
 
             Text("We do not store your uploaded PDFs or extracted transaction data.")
@@ -92,10 +149,11 @@ struct MobileConverterView: View {
                 .foregroundColor(BrandPalette.muted)
 
             if !errorMessage.isEmpty {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .font(.subheadline)
-                    .multilineTextAlignment(.leading)
+                StatusNotice(
+                    title: isTrialExpired ? "Trial access has ended" : "Conversion couldn't start",
+                    message: errorMessage,
+                    tone: isTrialExpired ? .warning : .error
+                )
             }
         }
         .padding(20)

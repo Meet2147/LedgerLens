@@ -98,9 +98,20 @@ final class MobileAPI {
 
     private func validate(response: URLResponse, data: Data) throws {
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-            let message = String(data: data, encoding: .utf8) ?? "Network request failed"
+            let message = parseErrorMessage(data) ?? String(data: data, encoding: .utf8) ?? "Network request failed"
             throw NSError(domain: "LedgerLensMobile", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
         }
+    }
+
+    private func parseErrorMessage(_ data: Data) -> String? {
+        guard
+            let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let error = object["error"] as? String
+        else {
+            return nil
+        }
+
+        return error
     }
 }
 

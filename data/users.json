@@ -8,8 +8,11 @@
       "createdAt": "2026-04-25T13:20:34.077Z",
       "billingCycle": "annual",
       "paymentStatus": "pending",
+      "trialStartedAt": "2026-04-25T13:20:34.077Z",
+      "trialEndsAt": "2026-05-02T13:20:34.077Z",
       "razorpayOrderId": "",
-      "razorpayPaymentId": ""
+      "razorpayPaymentId": "",
+      "workspaceMembers": []
     }
   ]
 }
