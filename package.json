@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "db:migrate": "node scripts/migrate-json-to-postgres.mjs"
   },
   "dependencies": {
     "exceljs": "4.4.0",
     "next": "15.5.15",
+    "pg": "^8.20.0",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   }
