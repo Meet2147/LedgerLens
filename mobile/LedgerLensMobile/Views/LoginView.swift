@@ -9,15 +9,8 @@ struct LoginView: View {
                 Spacer(minLength: 24)
 
                 VStack(spacing: 14) {
-                    Text("LedgerLens")
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [BrandPalette.aqua, BrandPalette.sky, BrandPalette.lilac],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
+                    BrandHeroMark(accent: .sky)
+                        .frame(width: 118, height: 118)
 
                     Text("Sign in with the same email you use on the web app and keep your conversions synced across devices.")
                         .foregroundColor(BrandPalette.muted)

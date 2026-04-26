@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 @MainActor
 final class MobileAuthStore: ObservableObject {
@@ -6,6 +7,8 @@ final class MobileAuthStore: ObservableObject {
     @Published var email: String = ""
     @Published var errorMessage: String = ""
     @Published var isLoading = false
+
+    @AppStorage("ledgerlens.mobile.didCompleteOnboarding") var didCompleteOnboarding = false
 
     var isLoggedIn: Bool {
         account != nil
