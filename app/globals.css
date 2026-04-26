@@ -454,6 +454,10 @@ h3 {
   margin-top: 1.25rem;
 }
 
+.result-summary-wide {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .download-actions {
   grid-auto-flow: column;
   justify-content: start;
@@ -465,6 +469,10 @@ h3 {
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 18px;
+}
+
+.table-wrap-large {
+  max-height: 70vh;
 }
 
 table {
@@ -496,6 +504,14 @@ td:nth-child(2) {
   place-items: center;
   min-height: 300px;
   text-align: center;
+}
+
+.result-review-panel {
+  margin-top: 1.5rem;
+}
+
+.result-copy {
+  margin-top: 0.75rem;
 }
 
 .section-header {

@@ -1,70 +1,8 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
-import ExcelJS from "exceljs";
-
-function getColumns(includeSourceFile) {
-  return includeSourceFile
-    ? ["sourceFile", "date", "description", "debit", "credit", "balance"]
-    : ["date", "description", "debit", "credit", "balance"];
-}
-
-function downloadCsv(rows, fileName, columns) {
-  const csvRows = [
-    columns.join(","),
-    ...rows.map((row) =>
-      columns
-        .map((column) => `"${String(row[column] ?? "").replace(/"/g, '""')}"`)
-        .join(",")
-    )
-  ];
-
-  const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${fileName}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-async function downloadXlsx(rows, fileName, columns) {
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Transactions");
-
-  worksheet.columns = columns.map((column) => ({
-    header: column.charAt(0).toUpperCase() + column.slice(1),
-    key: column,
-    width: column === "description" ? 48 : 18
-  }));
-
-  rows.forEach((row) => {
-    worksheet.addRow(row);
-  });
-
-  worksheet.getRow(1).font = { bold: true };
-
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${fileName}.xlsx`;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadJson(rows, fileName) {
-  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${fileName}.json`;
-  link.click();
-  URL.revokeObjectURL(url);
-}
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { persistConversionResult } from "@/components/conversion-result-view";
 
 function normalizeConversionResult(payload) {
   const rows = Array.isArray(payload?.rows) ? payload.rows : [];
@@ -91,43 +29,18 @@ function normalizeConversionResult(payload) {
   };
 }
 
-function formatTrialEndsAt(value) {
-  if (!value) {
-    return "your trial window";
-  }
-
-  const parsed = new Date(value);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return "your trial window";
-  }
-
-  return parsed.toLocaleDateString("en-IN");
-}
-
 export function UploadWorkbench({ capabilities, currentUser }) {
+  const router = useRouter();
   const [files, setFiles] = useState([]);
   const [password, setPassword] = useState("");
-  const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
-  const availableExportFormats = Array.isArray(capabilities?.exportFormats)
-    ? capabilities.exportFormats
-    : Array.isArray(capabilities?.exports)
-      ? capabilities.exports
-      : [];
-  const columns = useMemo(
-    () => getColumns((result?.rows || []).some((row) => row.sourceFile)),
-    [result]
-  );
-
-  const previewRows = useMemo(() => result?.rows?.slice(0, 8) ?? [], [result]);
   const isProfessional = capabilities.maxFilesPerUpload > 1;
+  const supportsMultiplePdfUploads = isProfessional;
 
   function handleSubmit(event) {
     event.preventDefault();
     setError("");
-    setResult(null);
 
     if (!currentUser) {
       setError("Please sign up or log in to use your 7-day trial.");
@@ -172,7 +85,9 @@ export function UploadWorkbench({ capabilities, currentUser }) {
           throw new Error(data.error || "We could not convert that statement yet.");
         }
 
-        setResult(normalizeConversionResult(data));
+        const normalized = normalizeConversionResult(data);
+        persistConversionResult(normalized);
+        router.push("/converter/result");
       } catch (submitError) {
         setError(submitError.message);
       }
@@ -215,11 +130,21 @@ export function UploadWorkbench({ capabilities, currentUser }) {
             <span>Password for protected PDFs</span>
             <input
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Leave blank if the PDF is unlocked"
+              placeholder={
+                supportsMultiplePdfUploads
+                  ? "Only single-file uploads can use a password"
+                  : "Leave blank if the PDF is unlocked"
+              }
               type="password"
               value={password}
             />
           </label>
+          {supportsMultiplePdfUploads ? (
+            <p className="muted">
+              Professional batch uploads combine multiple PDFs into one export, but those PDFs must
+              already be unlocked. Locked statements need to be converted one at a time.
+            </p>
+          ) : null}
           <button className="primary-button" disabled={isPending} type="submit">
             {isPending ? "Converting..." : "Convert statement"}
           </button>
@@ -228,92 +153,15 @@ export function UploadWorkbench({ capabilities, currentUser }) {
       </div>
 
       <div className="panel result-panel">
-        <div className="eyebrow">Preview</div>
-        {result ? (
-          <>
-            <div className="result-summary">
-              <div>
-                <strong>{Array.isArray(result.rows) ? result.rows.length : 0}</strong>
-                <span>rows detected</span>
-              </div>
-              <div>
-                <strong>{result.pageCount ?? 0}</strong>
-                <span>pages processed</span>
-              </div>
-            </div>
-            {currentUser ? (
-              <p className="muted usage-line">
-                {currentUser.paymentStatus === "paid"
-                  ? `${result.pagesUsedThisMonth} pages used this month · ${result.pagesRemainingThisMonth} pages remaining · ${result.queuePriority} processing`
-                  : `${result.trial.pdfsUsed}/${result.trial.pdfLimit} PDFs used · ${result.trial.pagesUsed}/${result.trial.pageLimit} pages used · Trial ends ${formatTrialEndsAt(result.trial.endsAt)}`}
-              </p>
-            ) : (
-              <p className="muted usage-line">
-                Sign in to start your 7-day trial and sync usage across web and mobile.
-              </p>
-            )}
-            <div className="download-actions">
-              <button
-                className="secondary-button"
-                onClick={() => downloadCsv(result.rows, result.fileStem, columns)}
-                type="button"
-              >
-                Download CSV
-              </button>
-              <button
-                className="secondary-button"
-                onClick={() => downloadXlsx(result.rows, result.fileStem, columns)}
-                type="button"
-              >
-                Download XLSX
-              </button>
-              {availableExportFormats.includes("json") ? (
-                <button
-                  className="secondary-button"
-                  onClick={() => downloadJson(result.rows, result.fileStem)}
-                  type="button"
-                >
-                  Download JSON
-                </button>
-              ) : null}
-            </div>
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    {columns.includes("sourceFile") ? <th>File</th> : null}
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {previewRows.map((row, index) => (
-                    <tr key={`${row.sourceFile || "single"}-${row.id || index}`}>
-                      {columns.includes("sourceFile") ? <td>{row.sourceFile}</td> : null}
-                      <td>{row.date}</td>
-                      <td>{row.description}</td>
-                      <td>{row.debit}</td>
-                      <td>{row.credit}</td>
-                      <td>{row.balance}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        ) : (
-          <div className="empty-state">
-            <p>Preview rows will appear here after a successful conversion.</p>
-            <p className="muted">
-              {isProfessional
-                ? `Professional includes up to ${capabilities.maxFilesPerUpload} files per upload and JSON exports.`
-                : "Personal stays focused on single-file spreadsheet conversion and CSV/XLSX exports."}
-            </p>
-          </div>
-        )}
+        <div className="eyebrow">Review flow</div>
+        <div className="empty-state">
+          <p>The converted table now opens on a dedicated results page after upload.</p>
+          <p className="muted">
+            {isProfessional
+              ? `Professional combines multiple unlocked PDFs into one export and opens the full merged table on its own review screen.`
+              : "Personal keeps single-file conversion focused, then opens a separate results screen for review and export."}
+          </p>
+        </div>
       </div>
     </section>
   );

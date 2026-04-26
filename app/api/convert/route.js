@@ -12,6 +12,8 @@ function normalizeFileStem(filename = "statement.pdf") {
 }
 
 export async function POST(request) {
+  let statementCount = 0;
+
   try {
     const currentUser = await getCurrentUserFromRequest(request);
 
@@ -29,6 +31,7 @@ export async function POST(request) {
       .getAll("statement")
       .filter((file) => file && typeof file.arrayBuffer === "function");
     const password = String(formData.get("password") || "");
+    statementCount = statements.length;
 
     if (statements.length === 0) {
       return NextResponse.json({ error: "Upload at least one PDF bank statement first." }, { status: 400 });
@@ -40,6 +43,16 @@ export async function POST(request) {
           error: `Your ${tier} plan supports up to ${limits.maxFilesPerUpload} file${limits.maxFilesPerUpload === 1 ? "" : "s"} per upload.`
         },
         { status: 403 }
+      );
+    }
+
+    if (statements.length > 1 && password.trim()) {
+      return NextResponse.json(
+        {
+          error:
+            "Multiple PDF uploads support unlocked statements only. Remove the password and upload unlocked PDFs, or convert locked statements one at a time."
+        },
+        { status: 400 }
       );
     }
 
@@ -156,7 +169,9 @@ export async function POST(request) {
   } catch (error) {
     const message =
       error?.code === "INCORRECT_PDF_PASSWORD"
-        ? "The PDF password is incorrect. Please re-enter it and try again."
+        ? statementCount > 1
+          ? "Multiple PDF uploads support unlocked statements only. One of the selected files appears to be locked. Please unlock the PDFs first or convert them one at a time."
+          : "The PDF password is incorrect. Please re-enter it and try again."
         : error?.code === "PDFTOTEXT_NOT_INSTALLED"
           ? "PDF conversion is not configured on the server yet. Install pdftotext and try again."
           : "The statement could not be processed yet. Try another PDF or check the password.";

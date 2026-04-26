@@ -46,6 +46,14 @@ struct MobileConverterView: View {
                 allowsMultipleSelection: true,
                 onCompletion: handleFileSelection
             )
+            .navigationDestination(item: $result) { converted in
+                MobileConversionResultView(
+                    result: converted,
+                    tierName: authStore.account?.tierName ?? "LedgerLens",
+                    onShareCSV: { shareCSV(converted) },
+                    onShareJSON: { shareJSON(converted) }
+                )
+            }
             .sheet(item: $exportItem) { item in
                 ShareSheet(items: [item.url])
             }
@@ -142,6 +150,12 @@ struct MobileConverterView: View {
                                 .stroke(BrandPalette.sky.opacity(0.12), lineWidth: 1)
                         )
                 }
+
+                if let account = authStore.account, account.maxFilesPerUpload > 1 {
+                    Text("Multiple PDFs support unlocked statements only. Batch uploads are merged into one combined export.")
+                        .font(.footnote)
+                        .foregroundColor(BrandPalette.muted)
+                }
             }
 
             Text("We do not store your uploaded PDFs or extracted transaction data.")
@@ -214,7 +228,7 @@ struct MobileConverterView: View {
 
     private var resultCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Preview")
+            Text("Result screen")
                 .font(.title2.weight(.bold))
                 .foregroundColor(BrandPalette.ink)
 
@@ -228,24 +242,11 @@ struct MobileConverterView: View {
 
                     usageSummary(result: result)
 
-                    exportButtons(result: result)
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Detected transactions")
-                            .font(.headline)
-                            .foregroundColor(BrandPalette.ink)
-
-                        transactionTable(rows: Array(result.rows.prefix(12)))
-
-                        if result.rows.count > 12 {
-                            Text("Showing the first 12 rows. Export to open the full result.")
-                                .font(.footnote)
-                                .foregroundColor(BrandPalette.muted)
-                        }
-                    }
+                    Text("Your latest conversion opens in a dedicated review screen so the transaction table and export actions have more room.")
+                        .foregroundColor(BrandPalette.muted)
                 }
             } else {
-                Text("Your converted rows will appear here after a successful upload.")
+                Text("After conversion, the full detected table opens on its own screen for review and export.")
                     .foregroundColor(BrandPalette.muted)
             }
         }
@@ -405,6 +406,9 @@ struct MobileConverterView: View {
             if pdfs.count > account.maxFilesPerUpload {
                 errorMessage = "Your \(account.tierName) plan supports up to \(account.maxFilesPerUpload) file(s) per upload."
                 selectedDocuments = Array(pdfs.prefix(account.maxFilesPerUpload))
+            } else if pdfs.count > 1 && !password.isEmpty {
+                errorMessage = "Multiple PDFs support unlocked statements only. Clear the password and upload unlocked PDFs."
+                selectedDocuments = pdfs
             } else {
                 errorMessage = ""
                 selectedDocuments = pdfs
@@ -424,6 +428,11 @@ struct MobileConverterView: View {
 
         guard !selectedDocuments.isEmpty else {
             errorMessage = "Choose at least one PDF statement first."
+            return
+        }
+
+        if selectedDocuments.count > 1 && !password.isEmpty {
+            errorMessage = "Multiple PDFs support unlocked statements only. Clear the password and upload unlocked PDFs."
             return
         }
 
@@ -508,6 +517,174 @@ struct MobileConverterView: View {
         }
 
         return "\"\(rawValue.replacingOccurrences(of: "\"", with: "\"\""))\""
+    }
+}
+
+private struct MobileConversionResultView: View {
+    let result: ConversionResult
+    let tierName: String
+    let onShareCSV: () -> Void
+    let onShareJSON: () -> Void
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Detected transactions")
+                        .font(.largeTitle.weight(.bold))
+                        .foregroundColor(BrandPalette.ink)
+
+                    Text("Review the combined conversion output in one clean place before you export or share it.")
+                        .foregroundColor(BrandPalette.muted)
+
+                    HStack(spacing: 12) {
+                        summaryBadge(value: "\(result.rows.count)", label: "rows")
+                        summaryBadge(value: "\(result.pageCount)", label: "pages")
+                        summaryBadge(value: tierName, label: "tier")
+                    }
+
+                    usageSummary
+                }
+                .padding(20)
+                .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Export")
+                        .font(.headline)
+                        .foregroundColor(BrandPalette.ink)
+
+                    HStack(spacing: 12) {
+                        Button("Share CSV") {
+                            onShareCSV()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(BrandPalette.sky)
+
+                        if result.exportFormats.contains("json") {
+                            Button("Share JSON") {
+                                onShareJSON()
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(BrandPalette.lilac)
+                        }
+                    }
+
+                    Text(result.rows.contains { ($0.sourceFile ?? "").isEmpty == false }
+                         ? "Multiple unlocked PDFs were combined into one export. The File column keeps each row traceable."
+                         : "This conversion came from a single statement and is ready to export.")
+                        .font(.footnote)
+                        .foregroundColor(BrandPalette.muted)
+                }
+                .padding(20)
+                .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Table preview")
+                        .font(.headline)
+                        .foregroundColor(BrandPalette.ink)
+
+                    transactionTable(rows: result.rows)
+                }
+                .padding(20)
+                .background(BrandPalette.surface, in: RoundedRectangle(cornerRadius: 24))
+            }
+            .padding()
+            .padding(.bottom, 20)
+        }
+        .navigationTitle("Results")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var usageSummary: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if result.trial.isActive {
+                Text("\(result.trial.pdfsUsed ?? 0)/\(result.trial.pdfLimit ?? 5) PDFs used • \(result.trial.pagesUsed ?? 0)/\(result.trial.pageLimit ?? 50) pages used")
+                    .foregroundColor(BrandPalette.muted)
+            } else if let used = result.pagesUsedThisMonth, let remaining = result.pagesRemainingThisMonth {
+                Text("\(used) pages used this month • \(remaining) pages remaining")
+                    .foregroundColor(BrandPalette.muted)
+            }
+        }
+    }
+
+    private func summaryBadge(value: String, label: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(value)
+                .font(.headline)
+                .foregroundColor(BrandPalette.ink)
+
+            Text(label.uppercased())
+                .font(.caption.weight(.semibold))
+                .foregroundColor(BrandPalette.muted)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
+        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 18))
+    }
+
+    private func transactionTable(rows: [TransactionRow]) -> some View {
+        let includesSourceFile = rows.contains { ($0.sourceFile ?? "").isEmpty == false }
+
+        return ScrollView(.horizontal, showsIndicators: false) {
+            VStack(spacing: 0) {
+                HStack(spacing: 0) {
+                    if includesSourceFile {
+                        tableHeaderCell("File", width: 180)
+                    }
+                    tableHeaderCell("Date", width: 110)
+                    tableHeaderCell("Description", width: 250)
+                    tableHeaderCell("Debit", width: 110)
+                    tableHeaderCell("Credit", width: 110)
+                    tableHeaderCell("Balance", width: 120)
+                }
+
+                ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                    HStack(spacing: 0) {
+                        if includesSourceFile {
+                            tableBodyCell(row.sourceFile ?? "-", width: 180, alignment: .leading, isEmphasized: false)
+                        }
+                        tableBodyCell(row.date, width: 110, alignment: .leading, isEmphasized: false)
+                        tableBodyCell(row.description, width: 250, alignment: .leading, isEmphasized: true)
+                        tableBodyCell(row.debit.isEmpty ? "-" : row.debit, width: 110, alignment: .trailing, isEmphasized: false)
+                        tableBodyCell(row.credit.isEmpty ? "-" : row.credit, width: 110, alignment: .trailing, isEmphasized: false)
+                        tableBodyCell(row.balance.isEmpty ? "-" : row.balance, width: 120, alignment: .trailing, isEmphasized: false)
+                    }
+                    .background(index.isMultiple(of: 2) ? BrandPalette.surfaceStrong : Color.white.opacity(0.72))
+                }
+            }
+        }
+        .background(.white.opacity(0.88), in: RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(BrandPalette.sky.opacity(0.10), lineWidth: 1)
+        )
+    }
+
+    private func tableHeaderCell(_ title: String, width: CGFloat) -> some View {
+        Text(title)
+            .font(.caption.weight(.bold))
+            .foregroundColor(BrandPalette.ink)
+            .textCase(.uppercase)
+            .frame(width: width, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 12)
+            .background(BrandPalette.sky.opacity(0.10))
+    }
+
+    private func tableBodyCell(
+        _ value: String,
+        width: CGFloat,
+        alignment: Alignment,
+        isEmphasized: Bool
+    ) -> some View {
+        Text(value)
+            .font(isEmphasized ? .subheadline.weight(.semibold) : .subheadline)
+            .foregroundColor(isEmphasized ? BrandPalette.ink : BrandPalette.muted)
+            .lineLimit(3)
+            .multilineTextAlignment(alignment == .trailing ? .trailing : .leading)
+            .frame(width: width, alignment: alignment)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 12)
     }
 }
 

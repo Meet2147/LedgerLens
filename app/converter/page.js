@@ -36,7 +36,8 @@ export default async function ConverterPage() {
           <h1>Upload, convert, preview, and export.</h1>
           <p className="hero-copy">
             This is the working conversion workspace. Upload a PDF statement, enter a password if
-            it is protected, inspect the preview, then export the result as CSV or XLSX.
+            it is protected, then review the converted table on a dedicated results page before
+            exporting as CSV or XLSX.
           </p>
           <p className="section-copy">
             Privacy note: we do not store your uploaded PDFs or the transaction data parsed from

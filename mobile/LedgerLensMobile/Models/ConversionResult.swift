@@ -1,6 +1,6 @@
 import Foundation
 
-struct ConversionResult: Codable {
+struct ConversionResult: Codable, Identifiable, Hashable {
     let fileStem: String
     let pageCount: Int
     let rows: [TransactionRow]
@@ -9,9 +9,13 @@ struct ConversionResult: Codable {
     let pagesRemainingThisMonth: Int?
     let exportFormats: [String]
     let trial: TrialUsageResponse
+
+    var id: String {
+        "\(fileStem)-\(pageCount)-\(rows.count)-\(queuePriority)"
+    }
 }
 
-struct TransactionRow: Codable, Identifiable {
+struct TransactionRow: Codable, Identifiable, Hashable {
     let id: String
     let sourceFile: String?
     let date: String
@@ -21,7 +25,7 @@ struct TransactionRow: Codable, Identifiable {
     let balance: String
 }
 
-struct TrialUsageResponse: Codable {
+struct TrialUsageResponse: Codable, Hashable {
     let isActive: Bool
     let pdfsUsed: Int?
     let pdfLimit: Int?
