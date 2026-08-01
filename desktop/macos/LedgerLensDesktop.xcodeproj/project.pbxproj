@@ -1,0 +1,390 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A20000000000000000000001 /* LedgerLensDesktopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000101 /* LedgerLensDesktopApp.swift */; };
+		A20000000000000000000002 /* StatementParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000102 /* StatementParser.swift */; };
+		A20000000000000000000003 /* PDFTextExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000103 /* PDFTextExtractor.swift */; };
+		A20000000000000000000004 /* StatementConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000104 /* StatementConverter.swift */; };
+		A20000000000000000000005 /* ZipArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000105 /* ZipArchive.swift */; };
+		A20000000000000000000006 /* SpreadsheetExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000106 /* SpreadsheetExporter.swift */; };
+		A2000000000000000000001E /* ICICIStatementParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000011E /* ICICIStatementParser.swift */; };
+		A200000000000000000000A0 /* PolarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000120 /* PolarConfig.swift */; };
+		A200000000000000000000A1 /* PolarClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000121 /* PolarClient.swift */; };
+		A200000000000000000000A2 /* LicenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000122 /* LicenseStore.swift */; };
+		A200000000000000000000A3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000123 /* SettingsView.swift */; };
+		A200000000000000000000A4 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000124 /* AppSettings.swift */; };
+		A20000000000000000000007 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000107 /* TransactionRow.swift */; };
+		A20000000000000000000008 /* ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000108 /* ConversionResult.swift */; };
+		A20000000000000000000009 /* BrandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000109 /* BrandPalette.swift */; };
+		A2000000000000000000000A /* ConverterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010A /* ConverterModel.swift */; };
+		A2000000000000000000000B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010B /* ContentView.swift */; };
+		A2000000000000000000000C /* InputPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010C /* InputPanel.swift */; };
+		A2000000000000000000000D /* ResultsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010D /* ResultsPanel.swift */; };
+		A2000000000000000000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010E /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000101 /* LedgerLensDesktopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerLensDesktopApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000102 /* StatementParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementParser.swift; sourceTree = "<group>"; };
+		A20000000000000000000103 /* PDFTextExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTextExtractor.swift; sourceTree = "<group>"; };
+		A20000000000000000000104 /* StatementConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementConverter.swift; sourceTree = "<group>"; };
+		A20000000000000000000105 /* ZipArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchive.swift; sourceTree = "<group>"; };
+		A20000000000000000000106 /* SpreadsheetExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadsheetExporter.swift; sourceTree = "<group>"; };
+		A2000000000000000000011E /* ICICIStatementParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICICIStatementParser.swift; sourceTree = "<group>"; };
+		A20000000000000000000120 /* PolarConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarConfig.swift; sourceTree = "<group>"; };
+		A20000000000000000000121 /* PolarClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarClient.swift; sourceTree = "<group>"; };
+		A20000000000000000000122 /* LicenseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseStore.swift; sourceTree = "<group>"; };
+		A20000000000000000000123 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000124 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A20000000000000000000107 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		A20000000000000000000108 /* ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionResult.swift; sourceTree = "<group>"; };
+		A20000000000000000000109 /* BrandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandPalette.swift; sourceTree = "<group>"; };
+		A2000000000000000000010A /* ConverterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterModel.swift; sourceTree = "<group>"; };
+		A2000000000000000000010B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A2000000000000000000010C /* InputPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPanel.swift; sourceTree = "<group>"; };
+		A2000000000000000000010D /* ResultsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsPanel.swift; sourceTree = "<group>"; };
+		A2000000000000000000010E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A2000000000000000000010F /* LedgerLensDesktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LedgerLensDesktop.entitlements; sourceTree = "<group>"; };
+		A20000000000000000000110 /* LedgerLensDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LedgerLensDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A20000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A20000000000000000000031 = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000032 /* LedgerLensDesktop */,
+				A20000000000000000000033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A20000000000000000000032 /* LedgerLensDesktop */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000101 /* LedgerLensDesktopApp.swift */,
+				A20000000000000000000034 /* Core */,
+				A20000000000000000000035 /* Models */,
+				A20000000000000000000036 /* Theme */,
+				A20000000000000000000037 /* ViewModels */,
+				A20000000000000000000038 /* Views */,
+				A2000000000000000000010E /* Assets.xcassets */,
+				A2000000000000000000010F /* LedgerLensDesktop.entitlements */,
+			);
+			path = LedgerLensDesktop;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000110 /* LedgerLensDesktop.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000034 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000102 /* StatementParser.swift */,
+				A2000000000000000000011E /* ICICIStatementParser.swift */,
+				A20000000000000000000103 /* PDFTextExtractor.swift */,
+				A20000000000000000000104 /* StatementConverter.swift */,
+				A20000000000000000000105 /* ZipArchive.swift */,
+				A20000000000000000000106 /* SpreadsheetExporter.swift */,
+				A20000000000000000000120 /* PolarConfig.swift */,
+				A20000000000000000000121 /* PolarClient.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000035 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000107 /* TransactionRow.swift */,
+				A20000000000000000000108 /* ConversionResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000036 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000109 /* BrandPalette.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000037 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000010A /* ConverterModel.swift */,
+				A20000000000000000000122 /* LicenseStore.swift */,
+				A20000000000000000000124 /* AppSettings.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000038 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000010B /* ContentView.swift */,
+				A2000000000000000000010C /* InputPanel.swift */,
+				A2000000000000000000010D /* ResultsPanel.swift */,
+				A20000000000000000000123 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A20000000000000000000041 /* LedgerLensDesktop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A20000000000000000000061 /* Build configuration list for PBXNativeTarget "LedgerLensDesktop" */;
+			buildPhases = (
+				A20000000000000000000042 /* Sources */,
+				A20000000000000000000021 /* Frameworks */,
+				A20000000000000000000043 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LedgerLensDesktop;
+			productName = LedgerLensDesktop;
+			productReference = A20000000000000000000110 /* LedgerLensDesktop.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A20000000000000000000051 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					A20000000000000000000041 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+				};
+			};
+			buildConfigurationList = A20000000000000000000060 /* Build configuration list for PBXProject "LedgerLensDesktop" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A20000000000000000000031;
+			productRefGroup = A20000000000000000000033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A20000000000000000000041 /* LedgerLensDesktop */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A20000000000000000000043 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2000000000000000000000E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A20000000000000000000042 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A20000000000000000000001 /* LedgerLensDesktopApp.swift in Sources */,
+				A20000000000000000000002 /* StatementParser.swift in Sources */,
+				A2000000000000000000001E /* ICICIStatementParser.swift in Sources */,
+				A200000000000000000000A0 /* PolarConfig.swift in Sources */,
+				A200000000000000000000A1 /* PolarClient.swift in Sources */,
+				A200000000000000000000A2 /* LicenseStore.swift in Sources */,
+				A200000000000000000000A3 /* SettingsView.swift in Sources */,
+				A200000000000000000000A4 /* AppSettings.swift in Sources */,
+				A20000000000000000000003 /* PDFTextExtractor.swift in Sources */,
+				A20000000000000000000004 /* StatementConverter.swift in Sources */,
+				A20000000000000000000005 /* ZipArchive.swift in Sources */,
+				A20000000000000000000006 /* SpreadsheetExporter.swift in Sources */,
+				A20000000000000000000007 /* TransactionRow.swift in Sources */,
+				A20000000000000000000008 /* ConversionResult.swift in Sources */,
+				A20000000000000000000009 /* BrandPalette.swift in Sources */,
+				A2000000000000000000000A /* ConverterModel.swift in Sources */,
+				A2000000000000000000000B /* ContentView.swift in Sources */,
+				A2000000000000000000000C /* InputPanel.swift in Sources */,
+				A2000000000000000000000D /* ResultsPanel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A20000000000000000000070 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A20000000000000000000071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A20000000000000000000072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LedgerLensDesktop/LedgerLensDesktop.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C9NLF34677;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Dashovia. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dashovia.ledgerlens.desktop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A20000000000000000000073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LedgerLensDesktop/LedgerLensDesktop.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C9NLF34677;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LedgerLens;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Dashovia. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dashovia.ledgerlens.desktop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A20000000000000000000060 /* Build configuration list for PBXProject "LedgerLensDesktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A20000000000000000000070 /* Debug */,
+				A20000000000000000000071 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A20000000000000000000061 /* Build configuration list for PBXNativeTarget "LedgerLensDesktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A20000000000000000000072 /* Debug */,
+				A20000000000000000000073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A20000000000000000000051 /* Project object */;
+}

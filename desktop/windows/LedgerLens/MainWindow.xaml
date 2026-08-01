@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LedgerLens.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="LedgerLens"
+    mc:Ignorable="d">
+
+    <Grid x:Name="Root" Background="{ThemeResource NeuBaseBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="360" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= SIDEBAR ================= -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Brand -->
+            <StackPanel Grid.Row="0" Spacing="12" Margin="20,18,20,10">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Left">
+                        <Image Width="40" Height="40" Source="ms-appx:///Assets/ledgerlens.png" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="LedgerLens" FontSize="18" FontWeight="Bold" Foreground="{ThemeResource TextPrimaryBrush}" />
+                            <TextBlock Text="Statements → spreadsheets" FontSize="12" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button x:Name="SettingsButton" Click="Settings_Click" HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Background="Transparent" BorderThickness="0" Padding="8" ToolTipService.ToolTip="Settings &amp; Upgrade">
+                        <FontIcon Glyph="&#xE713;" FontSize="16" Foreground="{ThemeResource TextSecondaryBrush}" />
+                    </Button>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Border Background="{ThemeResource AccentSoftBrush}" CornerRadius="12" Padding="11,6">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE72E;" FontSize="12" Foreground="{ThemeResource AccentBrush}" />
+                            <TextBlock Text="100% ON-DEVICE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource AccentBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Button x:Name="StatusPill" Click="Settings_Click" Background="{ThemeResource AccentSoftBrush}"
+                            BorderThickness="0" CornerRadius="12" Padding="11,6">
+                        <TextBlock x:Name="LicenseStatusText" Text="Trial" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource AccentBrush}" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Inputs -->
+            <ScrollViewer Grid.Row="1" Padding="20,10,20,10">
+                <StackPanel Spacing="22">
+                    <!-- Section 1 -->
+                    <StackPanel Spacing="13">
+                        <TextBlock Text="1   ADD STATEMENTS" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextPrimaryBrush}" />
+
+                        <Border x:Name="DropZone" Background="{ThemeResource NeuWellBrush}" CornerRadius="16" Padding="0,26"
+                                AllowDrop="True" DragOver="DropZone_DragOver" Drop="DropZone_Drop">
+                            <StackPanel HorizontalAlignment="Center" Spacing="10">
+                                <FontIcon Glyph="&#xE896;" FontSize="26" Foreground="{ThemeResource TextSecondaryBrush}" />
+                                <TextBlock Text="Drop PDF statements" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}" HorizontalAlignment="Center" />
+                                <Button Content="Browse files…" Click="Browse_Click" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+
+                        <ItemsControl ItemsSource="{Binding Files}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{ThemeResource NeuCardBrush}" CornerRadius="10" Padding="12,9" Margin="0,0,0,8"
+                                            BorderBrush="{ThemeResource NeuHairlineBrush}" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <FontIcon Grid.Column="0" Glyph="&#xE8A5;" FontSize="14" Foreground="{ThemeResource AccentBrush}" Margin="0,0,9,0" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" FontSize="12"
+                                                       TextTrimming="CharacterEllipsis" Foreground="{ThemeResource TextPrimaryBrush}" />
+                                            <Button Grid.Column="2" Content="✕" FontSize="10" Padding="6,2" Click="RemoveFile_Click" Tag="{Binding}"
+                                                    Background="Transparent" BorderThickness="0" Foreground="{ThemeResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Content="Clear all" Click="Clear_Click" HorizontalAlignment="Right"
+                                Background="Transparent" BorderThickness="0" Foreground="{ThemeResource DebitBrush}" FontSize="11"
+                                Visibility="{Binding HasFiles, Converter={StaticResource BoolToVisibility}}" />
+                    </StackPanel>
+
+                    <!-- Section 2 -->
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="2   PASSWORD (OPTIONAL)" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextPrimaryBrush}" />
+                        <PasswordBox Password="{Binding Password, Mode=TwoWay}" PlaceholderText="PDF password" />
+                        <TextBlock Text="Only needed for locked PDFs." FontSize="11" Foreground="{ThemeResource TextFaintBrush}" />
+                    </StackPanel>
+
+                    <!-- Error -->
+                    <Border Background="#22D6503B" CornerRadius="10" Padding="12"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource DebitBrush}" />
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Convert -->
+            <Button Grid.Row="2" Click="Convert_Click" IsEnabled="{Binding CanConvert}" Margin="20"
+                    HorizontalAlignment="Stretch" Height="46" CornerRadius="12"
+                    Background="{ThemeResource BrandGradientBrush}" Foreground="White">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ProgressRing Width="16" Height="16" Foreground="White" IsActive="{Binding IsConverting}"
+                                  Visibility="{Binding IsConverting, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Text="Convert" FontWeight="SemiBold" FontSize="15" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- ================= DETAIL ================= -->
+        <Grid Grid.Column="1">
+
+            <!-- Empty state -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16"
+                        Visibility="{Binding HasResult, Converter={StaticResource InverseBoolToVisibility}}">
+                <Border Width="96" Height="96" CornerRadius="48" Background="{ThemeResource AccentSoftBrush}">
+                    <FontIcon Glyph="&#xE9D9;" FontSize="34" Foreground="{ThemeResource AccentBrush}" />
+                </Border>
+                <TextBlock Text="Your transactions will appear here" FontSize="15" FontWeight="SemiBold"
+                           Foreground="{ThemeResource TextPrimaryBrush}" HorizontalAlignment="Center" />
+                <TextBlock Text="Add PDF bank statements on the left, then press Convert."
+                           FontSize="12" Foreground="{ThemeResource TextSecondaryBrush}" HorizontalAlignment="Center" TextAlignment="Center" />
+            </StackPanel>
+
+            <!-- Results -->
+            <Grid Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Toolbar -->
+                <Grid Grid.Row="0" Margin="24,18,24,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Spacing="8">
+                        <TextBlock Text="Converted transactions" FontSize="17" FontWeight="Bold" Foreground="{ThemeResource TextPrimaryBrush}" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Background="{ThemeResource AccentSoftBrush}" CornerRadius="10" Padding="10,4">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="{Binding RowCountText}" FontWeight="Bold" Foreground="{ThemeResource AccentBrush}" />
+                                    <TextBlock Text="rows" Foreground="{ThemeResource TextSecondaryBrush}" />
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{ThemeResource AccentSoftBrush}" CornerRadius="10" Padding="10,4">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="{Binding PageCountText}" FontWeight="Bold" Foreground="{ThemeResource AccentBrush}" />
+                                    <TextBlock Text="pages" Foreground="{ThemeResource TextSecondaryBrush}" />
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{ThemeResource AccentSoftBrush}" CornerRadius="10" Padding="10,4">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="{Binding FileCountText}" FontWeight="Bold" Foreground="{ThemeResource AccentBrush}" />
+                                    <TextBlock Text="files" Foreground="{ThemeResource TextSecondaryBrush}" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <Button Content="CSV" Click="ExportCsv_Click" />
+                        <Button Click="ExportXlsx_Click" Background="{ThemeResource BrandGradientBrush}" Foreground="White">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE896;" FontSize="14" />
+                                <TextBlock Text="Export XLSX" FontWeight="SemiBold" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Table -->
+                <Border Grid.Row="1" Margin="24,0,24,24" Background="{ThemeResource NeuWellBrush}" CornerRadius="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Padding="18,13">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="120" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="DATE" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextFaintBrush}" />
+                            <TextBlock Grid.Column="1" Text="DESCRIPTION" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextFaintBrush}" />
+                            <TextBlock Grid.Column="2" Text="DEBIT" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextFaintBrush}" TextAlignment="Right" />
+                            <TextBlock Grid.Column="3" Text="CREDIT" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextFaintBrush}" TextAlignment="Right" />
+                            <TextBlock Grid.Column="4" Text="BALANCE" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource TextFaintBrush}" TextAlignment="Right" />
+                        </Grid>
+
+                        <Rectangle Grid.Row="1" Height="1" Fill="{ThemeResource NeuHairlineBrush}" />
+
+                        <!-- Rows -->
+                        <ListView Grid.Row="2" ItemsSource="{Binding Rows}" SelectionMode="None"
+                                  ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Padding" Value="18,10" />
+                                    <Setter Property="MinHeight" Value="0" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="110" />
+                                            <ColumnDefinition Width="110" />
+                                            <ColumnDefinition Width="120" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Date}" FontSize="12.5" VerticalAlignment="Center"
+                                                   Foreground="{ThemeResource TextSecondaryBrush}" FontFamily="Consolas" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Description}" FontSize="12.5" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" Foreground="{ThemeResource TextPrimaryBrush}" Margin="0,0,12,0" />
+                                        <TextBlock Grid.Column="2" Text="{Binding DebitDisplay}" FontSize="12.5" VerticalAlignment="Center"
+                                                   TextAlignment="Right" Foreground="{ThemeResource DebitBrush}" FontFamily="Consolas" />
+                                        <TextBlock Grid.Column="3" Text="{Binding CreditDisplay}" FontSize="12.5" VerticalAlignment="Center"
+                                                   TextAlignment="Right" Foreground="{ThemeResource CreditBrush}" FontFamily="Consolas" />
+                                        <TextBlock Grid.Column="4" Text="{Binding BalanceDisplay}" FontSize="12.5" FontWeight="SemiBold" VerticalAlignment="Center"
+                                                   TextAlignment="Right" Foreground="{ThemeResource TextPrimaryBrush}" FontFamily="Consolas" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

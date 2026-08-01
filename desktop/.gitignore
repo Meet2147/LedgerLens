@@ -1,0 +1,21 @@
+# macOS / Xcode
+build/
+build-release/
+**/build/
+**/build-release/
+dmg-staging/
+macos/buildshot/
+macos/DerivedData/
+**/DerivedData/
+**/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.dmg
+*.zip
+
+# Windows / .NET
+windows/**/bin/
+windows/**/obj/
+windows/**/AppPackages/
+windows/**/BundleArtifacts/
+windows/.vs/
+*.user
