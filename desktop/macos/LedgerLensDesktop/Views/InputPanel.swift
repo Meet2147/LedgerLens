@@ -43,12 +43,6 @@ struct InputPanel: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(BrandPalette.base)
-        .fileImporter(
-            isPresented: $model.showFileImporter,
-            allowedContentTypes: [.pdf],
-            allowsMultipleSelection: true,
-            onCompletion: model.handleImport
-        )
     }
 
     // MARK: - Header

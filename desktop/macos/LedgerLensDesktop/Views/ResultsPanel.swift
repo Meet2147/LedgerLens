@@ -18,13 +18,6 @@ struct ResultsPanel: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(BrandPalette.base)
-        .fileExporter(
-            isPresented: $model.showExporter,
-            document: model.exportDocument,
-            contentType: model.exportContentType,
-            defaultFilename: model.exportFilename,
-            onCompletion: model.handleExport
-        )
     }
 }
 

@@ -1,27 +1,15 @@
 import Foundation
 import SwiftUI
+import AppKit
 import UniformTypeIdentifiers
 
-/// A tiny FileDocument wrapper so exports go through SwiftUI's `.fileExporter`, which presents
-/// reliably as a window-attached sheet (unlike `NSSavePanel.runModal()` on a borderless window).
-struct ExportDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [.data] }
-
-    var data: Data
-
-    init(data: Data) { self.data = data }
-
-    init(configuration: ReadConfiguration) throws {
-        data = configuration.file.regularFileContents ?? Data()
-    }
-
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: data)
-    }
-}
-
 /// Drives the converter screen: holds the selected PDFs and password, runs conversion off the
-/// main thread, and coordinates import/export via SwiftUI file dialogs. All work is local.
+/// main thread, and handles import/export. All work is local.
+///
+/// File dialogs use AppKit `NSOpenPanel`/`NSSavePanel` presented as **window sheets**
+/// (`beginSheetModal`). This is the reliable path on a borderless window — SwiftUI's
+/// `.fileImporter`/`.fileExporter` failed to re-present on repeated use and didn't enforce the
+/// file extension (exports came out without `.csv`/`.xlsx`).
 @MainActor
 final class ConverterModel: ObservableObject {
     @Published var selectedFiles: [URL] = []
@@ -30,17 +18,17 @@ final class ConverterModel: ObservableObject {
     @Published var result: ConversionResult?
     @Published var errorMessage: String?
 
-    // File-dialog coordination (bound to `.fileImporter` / `.fileExporter` in ContentView).
-    @Published var showFileImporter = false
-    @Published var showExporter = false
-    private(set) var exportDocument = ExportDocument(data: Data())
-    private(set) var exportContentType: UTType = .commaSeparatedText
-    private(set) var exportFilename = "statement"
-
     /// Injected so gated features (Convert) can check entitlement without tight coupling.
     weak var license: LicenseStore?
 
     var hasFiles: Bool { !selectedFiles.isEmpty }
+
+    // MARK: - Window helper
+
+    /// The app's main window, used to attach panels as sheets.
+    private var hostWindow: NSWindow? {
+        NSApp.keyWindow ?? NSApp.mainWindow ?? NSApp.windows.first { $0.isVisible }
+    }
 
     // MARK: - File selection
 
@@ -66,17 +54,27 @@ final class ConverterModel: ObservableObject {
         errorMessage = nil
     }
 
-    /// Opens the system file picker (via `.fileImporter`).
+    /// Opens the system file picker for PDFs.
     func presentOpenPanel() {
-        showFileImporter = true
-    }
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = true
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [.pdf]
+        panel.prompt = "Add"
+        panel.message = "Choose one or more PDF bank statements"
 
-    func handleImport(_ result: Result<[URL], Error>) {
-        switch result {
-        case .success(let urls):
-            addFiles(urls)
-        case .failure(let error):
-            errorMessage = error.localizedDescription
+        NSApp.activate(ignoringOtherApps: true)
+
+        let completion: (NSApplication.ModalResponse) -> Void = { [weak self] response in
+            guard response == .OK else { return }
+            self?.addFiles(panel.urls)
+        }
+
+        if let window = hostWindow {
+            panel.beginSheetModal(for: window, completionHandler: completion)
+        } else {
+            panel.begin(completionHandler: completion)
         }
     }
 
@@ -128,29 +126,40 @@ final class ConverterModel: ObservableObject {
     func exportCSV() {
         guard let result else { return }
         let data = SpreadsheetExporter.csv(rows: result.rows, includeSourceFile: result.isBatch)
-        presentExport(data: data, type: .commaSeparatedText, filename: result.fileStem)
+        save(data: data, fileStem: result.fileStem, ext: "csv", type: .commaSeparatedText)
     }
 
     func exportXLSX() {
         guard let result else { return }
         let data = SpreadsheetExporter.xlsx(rows: result.rows, includeSourceFile: result.isBatch)
         let xlsxType = UTType(filenameExtension: "xlsx") ?? .data
-        presentExport(data: data, type: xlsxType, filename: result.fileStem)
+        save(data: data, fileStem: result.fileStem, ext: "xlsx", type: xlsxType)
     }
 
-    private func presentExport(data: Data, type: UTType, filename: String) {
-        exportDocument = ExportDocument(data: data)
-        exportContentType = type
-        exportFilename = filename
-        showExporter = true
-    }
+    /// Presents a save panel (as a window sheet) with the extension baked into the default name
+    /// and enforced by `allowedContentTypes`, then writes the data to the chosen URL.
+    private func save(data: Data, fileStem: String, ext: String, type: UTType) {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "\(fileStem).\(ext)"
+        panel.allowedContentTypes = [type]
+        panel.isExtensionHidden = false
+        panel.canCreateDirectories = true
 
-    func handleExport(_ result: Result<URL, Error>) {
-        if case .failure(let error) = result {
-            // Cancellation surfaces as a benign error; ignore user cancels.
-            if (error as NSError).code != NSUserCancelledError {
-                errorMessage = "Couldn't save the file: \(error.localizedDescription)"
+        NSApp.activate(ignoringOtherApps: true)
+
+        let completion: (NSApplication.ModalResponse) -> Void = { [weak self] response in
+            guard response == .OK, let url = panel.url else { return }
+            do {
+                try data.write(to: url, options: .atomic)
+            } catch {
+                self?.errorMessage = "Couldn't save the file: \(error.localizedDescription)"
             }
+        }
+
+        if let window = hostWindow {
+            panel.beginSheetModal(for: window, completionHandler: completion)
+        } else {
+            panel.begin(completionHandler: completion)
         }
     }
 }

@@ -38,7 +38,9 @@ struct ContentView: View {
             // load and convert it on launch. Unset in normal use.
             if let path = ProcessInfo.processInfo.environment["LEDGERLENS_AUTOLOAD_PDF"] {
                 model.addFiles([URL(fileURLWithPath: path)])
-                model.convert()
+                if ProcessInfo.processInfo.environment["LEDGERLENS_AUTOCONVERT"] != "0" {
+                    model.convert()
+                }
             }
         }
     }

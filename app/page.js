@@ -203,7 +203,7 @@ const MARKUP = `
           <span style="text-align:left">Windows<span class="sub" style="display:block">Coming soon</span></span>
         </a>
       </div>
-      <div class="meta">Apple notarized · Developer ID: Meet Jethwa<br />SHA-256: <code>16bd9807d25d40ef7fea362aa2464617bbbd75dfb16ac88d4e23e24d6d28bbe0</code></div>
+      <div class="meta">Apple notarized · Developer ID: Meet Jethwa<br />SHA-256: <code>b49022125bb613355f90eebf81eb9e107f56ab4425aedbcab44a67b603cbfccb</code></div>
     </div>
   </div>
 </section>
