@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LedgerLens.Core;
 using LedgerLens.Services;
 using LedgerLens.ViewModels;
 using Microsoft.UI;
