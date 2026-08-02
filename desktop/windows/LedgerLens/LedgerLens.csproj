@@ -26,6 +26,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+    <!-- Registry access for license/appearance persistence (not in-box for WinUI targets). -->
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <!-- Local, MIT-licensed PDF text extraction — nothing is uploaded. -->
     <PackageReference Include="UglyToad.PdfPig" Version="0.1.9" />
   </ItemGroup>

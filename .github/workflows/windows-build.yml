@@ -1,0 +1,60 @@
+name: Windows build
+
+# Builds the WinUI 3 app on a Windows runner and publishes a self-contained .exe as both a
+# workflow artifact and a rolling GitHub Release (tag: win-latest) so the site can link to a
+# public download. Runs on demand and whenever the Windows sources change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "desktop/windows/**"
+      - ".github/workflows/windows-build.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore desktop/windows/LedgerLens/LedgerLens.csproj -r win-x64
+
+      # Self-contained + WindowsAppSDKSelfContained so the .exe runs without the user
+      # installing the Windows App SDK runtime. Unpackaged (WindowsPackageType=None) => plain exe.
+      - name: Publish (self-contained, unpackaged, x64)
+        run: >
+          dotnet publish desktop/windows/LedgerLens/LedgerLens.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:Platform=x64
+          -p:WindowsPackageType=None
+          -p:WindowsAppSDKSelfContained=true
+          -o publish_out
+
+      - name: Zip
+        run: Compress-Archive -Path publish_out/* -DestinationPath LedgerLens-Windows-x64.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LedgerLens-Windows-x64
+          path: LedgerLens-Windows-x64.zip
+
+      - name: Publish rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: win-latest
+          name: LedgerLens for Windows (latest)
+          body: |
+            Self-contained Windows x64 build of LedgerLens (unsigned).
+            Unzip and run `LedgerLens.exe`. First 5 statements free.
+          prerelease: true
+          files: LedgerLens-Windows-x64.zip
