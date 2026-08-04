@@ -100,30 +100,28 @@ private struct InnerShadow: View {
     }
 }
 
-/// A raised neumorphic button that presses inward on tap.
+/// A raised neumorphic button that softly presses in on tap.
+///
+/// IMPORTANT: the pressed state must NOT change the view's *structure* — it only animates the
+/// shadow values and a slight scale. Swapping between structurally different backgrounds
+/// (e.g. an outer-shadow "raised" look and a masked inner-shadow "inset" look) changes the
+/// label's identity mid-press, which makes SwiftUI cancel the button's tap so the action never
+/// fires on a normal (held) click. Keeping one constant structure fixes that.
 struct NeuButtonStyle: ButtonStyle {
     var radius: CGFloat = 12
     var tint: Color = BrandPalette.textPrimary
 
     func makeBody(configuration: Configuration) -> some View {
+        // The background structure is CONSTANT and geometry never changes on press — press
+        // feedback is opacity only. Anything that alters the label's structure or frame while
+        // pressed can make SwiftUI cancel the tap so the action never fires on a held click.
         configuration.label
             .font(.system(size: 12.5, weight: .semibold))
             .foregroundStyle(tint)
             .padding(.horizontal, 15)
             .padding(.vertical, 9)
-            .modifier(PressableNeu(pressed: configuration.isPressed, radius: radius))
-    }
-}
-
-private struct PressableNeu: ViewModifier {
-    let pressed: Bool
-    let radius: CGFloat
-
-    func body(content: Content) -> some View {
-        if pressed {
-            content.neuInset(radius)
-        } else {
-            content.neuRaised(radius)
-        }
+            .neuRaised(radius)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }
