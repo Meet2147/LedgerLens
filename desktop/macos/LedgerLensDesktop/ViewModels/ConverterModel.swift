@@ -125,13 +125,15 @@ final class ConverterModel: ObservableObject {
 
     func exportCSV() {
         guard let result else { return }
-        let data = SpreadsheetExporter.csv(rows: result.rows, includeSourceFile: result.isBatch)
+        let data = SpreadsheetExporter.csv(rows: result.rows, includeSourceFile: result.isBatch,
+                                           includeFlag: result.unreconciledCount > 0)
         save(data: data, fileStem: result.fileStem, ext: "csv", type: .commaSeparatedText)
     }
 
     func exportXLSX() {
         guard let result else { return }
-        let data = SpreadsheetExporter.xlsx(rows: result.rows, includeSourceFile: result.isBatch)
+        let data = SpreadsheetExporter.xlsx(rows: result.rows, includeSourceFile: result.isBatch,
+                                            includeFlag: result.unreconciledCount > 0)
         let xlsxType = UTType(filenameExtension: "xlsx") ?? .data
         save(data: data, fileStem: result.fileStem, ext: "xlsx", type: xlsxType)
     }

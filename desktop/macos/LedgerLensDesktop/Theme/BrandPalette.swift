@@ -28,6 +28,7 @@ enum BrandPalette {
     static let aqua = dynamic(light: Color(hex: 0x36C6E6), dark: Color(hex: 0x46D2F0))
     static let debit = dynamic(light: Color(hex: 0xD6503B), dark: Color(hex: 0xFF8674))
     static let credit = dynamic(light: Color(hex: 0x1F9A6B), dark: Color(hex: 0x45D9A0))
+    static let warning = dynamic(light: Color(hex: 0xB8791A), dark: Color(hex: 0xF0B44C))
     static let success = credit
 
     static let brandGradient = LinearGradient(

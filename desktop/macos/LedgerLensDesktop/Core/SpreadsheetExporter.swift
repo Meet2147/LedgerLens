@@ -14,7 +14,7 @@ enum SpreadsheetExporter {
         let value: (TransactionRow) -> String
     }
 
-    static func columns(includeSourceFile: Bool) -> [Column] {
+    static func columns(includeSourceFile: Bool, includeFlag: Bool = false) -> [Column] {
         var cols: [Column] = []
         if includeSourceFile {
             cols.append(Column(key: "sourceFile", header: "SourceFile", width: 18) { $0.sourceFile ?? "" })
@@ -24,13 +24,17 @@ enum SpreadsheetExporter {
         cols.append(Column(key: "debit", header: "Debit", width: 18) { $0.debit })
         cols.append(Column(key: "credit", header: "Credit", width: 18) { $0.credit })
         cols.append(Column(key: "balance", header: "Balance", width: 18) { $0.balance })
+        if includeFlag {
+            // Marks rows whose balance didn't reconcile so they're filterable in Excel.
+            cols.append(Column(key: "flag", header: "Flag", width: 12) { $0.reconciled ? "" : "check" })
+        }
         return cols
     }
 
     // MARK: - CSV
 
-    static func csv(rows: [TransactionRow], includeSourceFile: Bool) -> Data {
-        let cols = columns(includeSourceFile: includeSourceFile)
+    static func csv(rows: [TransactionRow], includeSourceFile: Bool, includeFlag: Bool = false) -> Data {
+        let cols = columns(includeSourceFile: includeSourceFile, includeFlag: includeFlag)
         var lines: [String] = []
         lines.append(cols.map { $0.key }.joined(separator: ","))
 
@@ -48,8 +52,8 @@ enum SpreadsheetExporter {
 
     // MARK: - XLSX
 
-    static func xlsx(rows: [TransactionRow], includeSourceFile: Bool) -> Data {
-        let cols = columns(includeSourceFile: includeSourceFile)
+    static func xlsx(rows: [TransactionRow], includeSourceFile: Bool, includeFlag: Bool = false) -> Data {
+        let cols = columns(includeSourceFile: includeSourceFile, includeFlag: includeFlag)
         var archive = ZipArchive()
 
         archive.addFile(name: "[Content_Types].xml", contents: Data(contentTypesXML.utf8))

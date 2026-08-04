@@ -23,11 +23,13 @@ enum StatementConverter {
         var rows: [TransactionRow] = []
         var totalPages = 0
         var fileNames: [String] = []
+        var usedOCR = false
         let isBatch = fileURLs.count > 1
 
         for url in fileURLs {
             let extraction = try PDFTextExtractor.extract(from: url, password: password)
             totalPages += extraction.pageCount
+            if extraction.usedOCR { usedOCR = true }
             fileNames.append(url.lastPathComponent)
 
             let parsed = StatementParsing.parseBest(layoutText: extraction.text)
@@ -60,6 +62,10 @@ enum StatementConverter {
             throw ConversionError.noRowsDetected
         }
 
+        // Reconcile: flag each row whose running balance doesn't add up.
+        let reconciliation = reconcile(rows)
+        rows = reconciliation.rows
+
         let stem = isBatch
             ? "ledgerlens-batch"
             : normalizeFileStem(fileNames.first ?? "statement.pdf")
@@ -68,8 +74,44 @@ enum StatementConverter {
             fileStem: stem,
             pageCount: totalPages,
             rows: rows,
-            sourceFiles: fileNames
+            sourceFiles: fileNames,
+            usedOCR: usedOCR,
+            unreconciledCount: reconciliation.unreconciled
         )
+    }
+
+    /// Marks each row `reconciled == false` when `balance != previousBalance ± amount`.
+    /// Uses absolute amounts so DR/CR sign encodings don't matter. Rows without a numeric
+    /// balance, or without any amount, are skipped (left reconciled). The first row with a
+    /// balance is the anchor and is never flagged.
+    static func reconcile(_ input: [TransactionRow]) -> (rows: [TransactionRow], unreconciled: Int) {
+        var rows = input
+        var previousBalance: Double?
+        var unreconciled = 0
+
+        for index in rows.indices {
+            guard let balance = money(rows[index].balance) else { continue }
+            let debit = money(rows[index].debit)
+            let credit = money(rows[index].credit)
+
+            if let prior = previousBalance, debit != nil || credit != nil {
+                let movement = (credit.map(abs) ?? 0) - (debit.map(abs) ?? 0)
+                let expected = prior + movement
+                if abs(expected - balance) > 0.015 {
+                    rows[index].reconciled = false
+                    unreconciled += 1
+                }
+            }
+            previousBalance = balance
+        }
+
+        return (rows, unreconciled)
+    }
+
+    private static func money(_ value: String) -> Double? {
+        let trimmed = value.replacingOccurrences(of: ",", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : Double(trimmed)
     }
 
     /// Port of `normalizeFileStem` from `app/api/convert/route.js`.

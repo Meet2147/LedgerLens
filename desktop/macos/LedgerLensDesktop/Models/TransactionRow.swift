@@ -13,4 +13,9 @@ struct TransactionRow: Codable, Identifiable, Hashable {
     let debit: String
     let credit: String
     let balance: String
+
+    /// Reconciliation result: false when this row's `balance` doesn't equal the previous
+    /// balance ± this row's amount (set by `StatementConverter.reconcile`). Rows that can't be
+    /// checked (no prior balance, missing amount/balance) stay `true`.
+    var reconciled: Bool = true
 }

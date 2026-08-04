@@ -47,6 +47,8 @@ private struct Toolbar: View {
                     StatPill(value: "\(result.rows.count)", label: result.rows.count == 1 ? "row" : "rows")
                     StatPill(value: "\(result.pageCount)", label: "pages")
                     StatPill(value: "\(result.sourceFiles.count)", label: result.sourceFiles.count == 1 ? "file" : "files")
+                    if result.usedOCR { OCRChip() }
+                    ReconcileChip(unreconciled: result.unreconciledCount, rowCount: result.rows.count)
                 }
             }
 
@@ -99,6 +101,54 @@ private struct StatPill: View {
         .padding(.horizontal, 11)
         .padding(.vertical, 6)
         .neuRaised(20)
+    }
+}
+
+/// Summarizes the running-balance reconciliation: green when every row adds up, amber with a
+/// count when some rows don't.
+private struct ReconcileChip: View {
+    let unreconciled: Int
+    let rowCount: Int
+
+    var body: some View {
+        if unreconciled > 0 {
+            chip(icon: "exclamationmark.triangle.fill",
+                 text: "\(unreconciled) to check",
+                 tint: BrandPalette.warning)
+        } else if rowCount > 1 {
+            chip(icon: "checkmark.seal.fill", text: "reconciled", tint: BrandPalette.credit)
+        }
+    }
+
+    private func chip(icon: String, text: String, tint: Color) -> some View {
+        HStack(spacing: 5) {
+            Image(systemName: icon).font(.system(size: 10.5, weight: .semibold))
+            Text(text).font(.system(size: 11, weight: .semibold))
+        }
+        .foregroundStyle(tint)
+        .padding(.horizontal, 11)
+        .padding(.vertical, 6)
+        .background(Capsule().fill(tint.opacity(0.14)))
+        .help(unreconciled > 0
+              ? "\(unreconciled) row\(unreconciled == 1 ? "" : "s") don't reconcile — the balance doesn't equal the previous balance ± the amount. Flagged in the table."
+              : "Every row's running balance adds up.")
+    }
+}
+
+/// Shown when a statement was read via OCR (a scan) — nudges the user to double-check amounts.
+private struct OCRChip: View {
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: "doc.viewfinder")
+                .font(.system(size: 10.5, weight: .semibold))
+            Text("Scanned · OCR — verify")
+                .font(.system(size: 11, weight: .semibold))
+        }
+        .foregroundStyle(BrandPalette.warning)
+        .padding(.horizontal, 11)
+        .padding(.vertical, 6)
+        .background(Capsule().fill(BrandPalette.warning.opacity(0.14)))
+        .help("This statement had no text layer, so it was read with on-device OCR. Numbers are usually right, but scans deserve a quick check.")
     }
 }
 
@@ -163,10 +213,18 @@ private struct RowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text(row.date)
-                .font(.system(size: 12).monospacedDigit())
-                .foregroundStyle(BrandPalette.textSecondary)
-                .frame(width: Col.date, alignment: .leading)
+            HStack(spacing: 4) {
+                if !row.reconciled {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 9.5, weight: .bold))
+                        .foregroundStyle(BrandPalette.warning)
+                        .help("This row's balance doesn't add up (balance ≠ previous ± amount). Worth a check.")
+                }
+                Text(row.date)
+                    .font(.system(size: 12).monospacedDigit())
+                    .foregroundStyle(BrandPalette.textSecondary)
+            }
+            .frame(width: Col.date, alignment: .leading)
 
             if isBatch {
                 Text(row.sourceFile ?? "")
@@ -185,11 +243,15 @@ private struct RowView: View {
 
             money(row.debit, tone: BrandPalette.debit, width: Col.debit)
             money(row.credit, tone: BrandPalette.credit, width: Col.credit)
-            money(row.balance, tone: BrandPalette.textPrimary, width: Col.balance, bold: true)
+            money(row.balance, tone: row.reconciled ? BrandPalette.textPrimary : BrandPalette.warning, width: Col.balance, bold: true)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 11)
-        .background(even ? Color.clear : BrandPalette.lightShadow.opacity(0.18))
+        .background(
+            row.reconciled
+                ? (even ? Color.clear : BrandPalette.lightShadow.opacity(0.18))
+                : BrandPalette.warning.opacity(0.12)
+        )
     }
 
     private func money(_ text: String, tone: Color, width: CGFloat, bold: Bool = false) -> some View {
