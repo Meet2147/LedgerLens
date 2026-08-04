@@ -14,6 +14,9 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <ApplicationIcon>Assets\ledgerlens.ico</ApplicationIcon>
+    <!-- WinUI self-contained publishes hit NETSDK1152 (duplicate publish output files)
+         from the Windows App SDK runtime; allow it. -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>
